@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roster Kuliah</title>
+<style>
+  :root{
+    --bg:#EEF1F4;
+    --surface:#FFFFFF;
+    --surface-2:#F5F7F9;
+    --ink:#1C2333;
+    --ink-soft:#4C5566;
+    --primary:#22406B;
+    --primary-ink:#FFFFFF;
+    --accent:#D9A441;
+    --line:#D7DCE2;
+    --danger:#B3483F;
+    --radius:8px;
+    --shadow:0 1px 2px rgba(28,35,51,0.06), 0 4px 14px rgba(28,35,51,0.06);
+    --font-serif: 'Iowan Old Style','Palatino Linotype','Book Antiqua',Georgia,serif;
+    --font-sans: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  [data-theme="dark"]{
+    --bg:#171B24;
+    --surface:#1F2532;
+    --surface-2:#242B3A;
+    --ink:#E8EAEE;
+    --ink-soft:#A6ADBB;
+    --primary:#5E85BC;
+    --primary-ink:#0E1218;
+    --accent:#E3B85C;
+    --line:#323A4A;
+    --shadow:0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.3);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-sans);
+    font-size:14px;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  h1,h2,h3{font-family:var(--font-serif);font-weight:600;margin:0;}
+  button{font-family:inherit;font-size:inherit;cursor:pointer;}
+  input,select{font-family:inherit;font-size:inherit;}
+
+  /* ---------- Header ---------- */
+  .topbar{background:var(--primary);color:var(--primary-ink);padding:20px 20px 24px;}
+  .topbar-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+  .topbar h1{font-size:26px;letter-spacing:0.2px;}
+  .semester-pill{
+    background:transparent;border:none;color:rgba(255,255,255,0.85);
+    font-size:13px;margin-top:4px;padding:0;max-width:280px;text-align:left;
+    border-bottom:1px dashed rgba(255,255,255,0.4);cursor:pointer;font-family:inherit;
+  }
+  .semester-pill:hover{border-bottom-color:rgba(255,255,255,0.75);}
+  .storage-note{font-size:11px;color:rgba(255,255,255,0.55);margin-top:7px;}
+  .stat-chips{display:flex;gap:10px;flex-wrap:wrap;}
+  .stat-chip{background:rgba(255,255,255,0.12);border-radius:var(--radius);padding:8px 14px;min-width:74px;text-align:center;}
+  .stat-chip .num{font-family:var(--font-serif);font-size:20px;display:block;line-height:1.1;}
+  .stat-chip .label{font-size:11px;color:rgba(255,255,255,0.75);}
+  .today-panel{margin-top:16px;background:rgba(255,255,255,0.1);border-radius:var(--radius);padding:12px 14px;}
+  .today-head{font-family:var(--font-serif);font-size:14px;margin-bottom:6px;color:rgba(255,255,255,0.95);}
+  .today-subhead{font-size:11px;color:rgba(255,255,255,0.65);margin:8px 0 4px;}
+  .today-item{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;color:rgba(255,255,255,0.88);}
+  .today-item.ongoing{color:#fff;font-weight:600;}
+  .today-item .ti-time{font-family:var(--font-serif);min-width:42px;color:var(--accent);flex:none;}
+  .today-item .ti-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .today-item .ti-badge{font-size:10px;background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:10px;flex:none;}
+  .today-empty{font-size:12.5px;color:rgba(255,255,255,0.7);padding:2px 0;}
+  .today-more{font-size:11.5px;color:rgba(255,255,255,0.6);padding:2px 0;}
+  .backup-banner{
+    max-width:1100px;margin:14px auto 0;padding:10px 14px;
+    background:#FBEFD9;border:1px solid var(--accent);border-radius:var(--radius);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--ink);
+  }
+  [data-theme="dark"] .backup-banner{background:#3A2F1A;}
+  .backup-banner-actions{display:flex;gap:6px;flex:none;}
+  .backup-banner-actions button{border:none;cursor:pointer;font-size:12px;padding:6px 10px;border-radius:6px;}
+  .backup-banner-actions .bb-now{background:var(--primary);color:var(--primary-ink);}
+  .backup-banner-actions .bb-snooze{background:none;color:var(--ink-soft);}
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{max-width:1100px;margin:0 auto;padding:16px 20px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .toolbar input[type="search"], .toolbar select#day-filter{
+    padding:9px 12px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink);
+  }
+  .toolbar input[type="search"]{flex:1;min-width:160px;}
+  .btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;border-radius:var(--radius);white-space:nowrap;transition:background 0.15s ease;}
+  .btn:hover{background:var(--surface-2);}
+  .btn-primary{background:var(--primary);color:var(--primary-ink);border-color:var(--primary);}
+  .btn-primary:hover{opacity:0.92;background:var(--primary);}
+  .btn-ghost{border-color:transparent;background:transparent;}
+  .btn-ghost:hover{background:var(--surface-2);}
+  .view-toggle{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+  .view-toggle button{border:none;background:var(--surface);padding:9px 14px;color:var(--ink-soft);}
+  .view-toggle button.active{background:var(--primary);color:var(--primary-ink);}
+  .menu-wrap{position:relative;}
+  .menu-dropdown{position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:220px;z-index:40;overflow:hidden;display:none;}
+  .menu-dropdown.open{display:block;}
+  .menu-dropdown button{display:flex;width:100%;text-align:left;padding:10px 14px;border:none;background:none;color:var(--ink);}
+  .menu-dropdown button:hover{background:var(--surface-2);}
+  .menu-dropdown hr{border:none;border-top:1px solid var(--line);margin:4px 0;}
+
+  /* ---------- Summary panel ---------- */
+  .summary-panel{max-width:1100px;margin:14px auto 0;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
+  .summary-panel h3{font-size:14px;margin-bottom:10px;}
+  .summary-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:12.5px;}
+  .summary-day{width:52px;color:var(--ink-soft);flex:none;}
+  .summary-bar-wrap{flex:1;background:var(--surface-2);border-radius:5px;height:9px;overflow:hidden;}
+  .summary-bar{height:100%;background:var(--accent);border-radius:5px;}
+  .summary-hours{width:52px;text-align:right;color:var(--ink-soft);flex:none;}
+
+  /* ---------- Main content ---------- */
+  main{max-width:1100px;margin:0 auto;padding:16px 20px 60px;}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--ink-soft);}
+  .empty-state h3{font-size:19px;color:var(--ink);margin-bottom:8px;}
+  .empty-state p{max-width:360px;margin:0 auto 18px;}
+
+  /* Weekly grid */
+  .grid-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
+  .timetable{display:flex;min-width:760px;}
+  .time-col{width:56px;flex:none;position:relative;border-right:1px solid var(--line);}
+  .time-col .head-cell{height:44px;border-bottom:1px solid var(--line);}
+  .time-label{position:absolute;left:0;right:6px;text-align:right;font-size:11px;color:var(--ink-soft);transform:translateY(-7px);}
+  .day-col{flex:1;min-width:110px;border-right:1px solid var(--line);position:relative;}
+  .day-col:last-child{border-right:none;}
+  .head-cell{height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);}
+  .day-col.is-today .head-cell{color:var(--ink);font-weight:600;}
+  .day-col.is-today .head-cell::after{content:"";display:block;width:22px;height:2px;background:var(--accent);margin-top:4px;border-radius:2px;}
+  .day-body{position:relative;background-image:repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--hour-px) - 1px), var(--line) calc(var(--hour-px) - 1px), var(--line) var(--hour-px));}
+  .course-block{position:absolute;border-radius:0 6px 6px 0;border-left:4px solid;padding:5px 7px;overflow:hidden;font-size:11.5px;line-height:1.35;background:var(--surface-2);box-shadow:var(--shadow);cursor:pointer;}
+  .course-block:hover{filter:brightness(0.97);}
+  .course-block .cb-title{font-weight:600;color:var(--ink);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .course-block .cb-meta{color:var(--ink-soft);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .course-block.is-filtered{opacity:0.15;pointer-events:none;}
+
+  /* List view */
+  .day-group{margin-bottom:22px;}
+  .day-group h3{font-size:16px;padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:10px;}
+  .course-row{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-left:4px solid;border-radius:0 var(--radius) var(--radius) 0;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);cursor:pointer;}
+  .course-row:hover{background:var(--surface-2);}
+  .course-row .cr-time{font-family:var(--font-serif);font-size:14px;min-width:96px;color:var(--ink-soft);}
+  .course-row .cr-body{flex:1;}
+  .course-row .cr-title{font-weight:600;}
+  .course-row .cr-meta{color:var(--ink-soft);font-size:12.5px;margin-top:2px;}
+  .course-row .cr-side{text-align:right;font-size:12px;color:var(--ink-soft);white-space:nowrap;}
+  .course-row .cr-hadir{display:block;margin-top:3px;color:var(--accent);}
+
+  /* ---------- Modal ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(20,24,32,0.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px;opacity:0;pointer-events:none;transition:opacity 0.15s ease;}
+  #confirm-overlay, #input-overlay{z-index:150;}
+  .overlay.open{opacity:1;pointer-events:auto;}
+  .modal{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);width:100%;max-width:420px;max-height:90vh;overflow-y:auto;transform:translateY(8px) scale(0.98);transition:transform 0.15s ease;}
+  .overlay.open .modal{transform:translateY(0) scale(1);}
+  .modal-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+  .modal-head h2{font-size:18px;}
+  .modal-body{padding:16px 18px;}
+  .field{margin-bottom:13px;}
+  .field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:4px;}
+  .field input,.field select,.field textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font-family:inherit;resize:vertical;}
+  .field-row{display:flex;gap:10px;}
+  .field-row .field{flex:1;}
+  .swatches{display:flex;gap:8px;flex-wrap:wrap;}
+  .swatch{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;}
+  .swatch.selected{border-color:var(--ink);}
+  .conflict-note{background:#F7E9DD;color:var(--danger);border-radius:6px;padding:9px 11px;font-size:12.5px;margin-bottom:12px;}
+  [data-theme="dark"] .conflict-note{background:#3A2A26;}
+  .attendance-block{background:var(--surface-2);border-radius:6px;padding:10px 12px;}
+  .attendance-block label{display:flex;justify-content:space-between;}
+  .attendance-history{max-height:130px;overflow-y:auto;margin:8px 0;}
+  .attendance-item{display:flex;gap:8px;align-items:flex-start;font-size:12px;padding:5px 0;border-bottom:1px solid var(--line);}
+  .attendance-item:last-child{border-bottom:none;}
+  .attendance-item .ai-date{color:var(--ink-soft);min-width:70px;flex:none;}
+  .attendance-item .ai-materi{flex:1;color:var(--ink);word-break:break-word;}
+  .attendance-item .ai-del{color:var(--danger);background:none;border:none;cursor:pointer;font-size:11px;padding:0;flex:none;}
+  .attendance-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;}
+  .attendance-row input{flex:1;min-width:140px;width:auto;padding:8px 9px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);}
+  .attendance-row input[type="date"]{flex:none;width:132px;}
+  .attendance-cancel-btn{padding:4px 0 !important;border:none !important;background:none !important;font-size:12px;color:var(--danger);margin-top:4px;}
+  .cr-catatan{font-size:12px;color:var(--ink-soft);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .semester-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .semester-row:last-child{border-bottom:none;}
+  .semester-row .sr-name{flex:1;cursor:pointer;}
+  .semester-row.active .sr-name{font-weight:600;color:var(--primary);}
+  .semester-row .sr-meta{font-size:11.5px;color:var(--ink-soft);display:block;}
+  .semester-row button{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:12px;padding:2px 6px;}
+  .semester-row .sr-del{color:var(--danger);}
+  .modal-foot{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;}
+  .modal-foot .left, .modal-foot .right{display:flex;gap:8px;}
+  .confirm-modal .modal-body{padding-top:4px;}
+  .confirm-modal p{color:var(--ink-soft);}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:6px;font-size:13px;opacity:0;pointer-events:none;transition:all 0.2s ease;z-index:200;max-width:88vw;text-align:center;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  #file-input{display:none;}
+  .app-footer{
+    max-width:1100px;margin:8px auto 24px;padding:0 20px;
+    text-align:center;font-family:var(--font-serif);font-size:11.5px;
+    color:var(--ink-soft);letter-spacing:0.3px;
+  }
+
+  @media print{
+    @page{ size:A4 landscape; margin:12mm; }
+    .toolbar, .menu-dropdown, .overlay, .toast, .summary-panel, .today-panel, .storage-note, .backup-banner{display:none !important;}
+    body{background:#fff;color:#000;}
+    .topbar{background:none !important;color:#000 !important;padding:0 0 12px !important;margin-bottom:14px;border-bottom:2px solid #000;}
+    .topbar .semester-pill{color:#000 !important;border-bottom:none !important;}
+    .stat-chips{display:flex !important;}
+    .stat-chip{background:none !important;border:1px solid #000;}
+    .stat-chip .label{color:#000 !important;}
+    .grid-scroll{overflow:visible !important;border:none;box-shadow:none;}
+    .timetable{min-width:0 !important;width:100%;}
+    .day-col{min-width:0 !important;}
+    .course-block, .course-row{box-shadow:none;background:#fff !important;border-color:#999;}
+    .day-group, .course-row{break-inside:avoid;}
+    .grid-scroll, .day-group{border-color:#999;}
+  }
+  @media (max-width:560px){
+    .topbar h1{font-size:22px;}
+    .stat-chip{min-width:60px;padding:6px 10px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>Roster Kuliah</h1>
+      <button type="button" class="semester-pill" id="semester-pill">Semester</button>
+      <div class="storage-note">Data tersimpan otomatis di peramban ini.</div>
+    </div>
+    <div class="stat-chips">
+      <div class="stat-chip"><span class="num" id="stat-count">0</span><span class="label">mata kuliah</span></div>
+      <div class="stat-chip"><span class="num" id="stat-sks">0</span><span class="label">total sks</span></div>
+      <div class="stat-chip"><span class="num" id="stat-ip">-</span><span class="label">IP semester</span></div>
+      <div class="stat-chip"><span class="num" id="stat-ipk">-</span><span class="label">IPK</span></div>
+    </div>
+  </div>
+  <div class="today-panel" id="today-panel"></div>
+</div>
+
+<div class="backup-banner" id="backup-banner" style="display:none;">
+  <span id="backup-banner-text"></span>
+  <div class="backup-banner-actions">
+    <button type="button" class="bb-now" id="backup-now-btn">Ekspor sekarang</button>
+    <button type="button" class="bb-snooze" id="backup-snooze-btn">Nanti saja</button>
+  </div>
+</div>
+
+<div class="toolbar">
+  <input type="search" id="search-input" placeholder="Cari mata kuliah atau dosen…">
+  <select id="day-filter">
+    <option value="">Semua hari</option>
+    <option>Senin</option><option>Selasa</option><option>Rabu</option>
+    <option>Kamis</option><option>Jumat</option><option>Sabtu</option>
+  </select>
+  <div class="view-toggle">
+    <button id="view-grid-btn" class="active">Mingguan</button>
+    <button id="view-list-btn">Daftar</button>
+    <button id="view-tugas-btn">Tugas</button>
+  </div>
+  <button class="btn btn-primary" id="add-btn">Tambah mata kuliah</button>
+  <button class="btn btn-ghost" id="print-btn" title="Cetak jadwal">🖨️ Cetak</button>
+  <div class="menu-wrap">
+    <button class="btn btn-ghost" id="menu-btn">⋯</button>
+    <div class="menu-dropdown" id="menu-dropdown">
+      <button id="summary-btn">Tampilkan ringkasan minggu</button>
+      <button id="notif-btn">Aktifkan pengingat</button>
+      <button id="theme-btn">Ganti ke mode gelap</button>
+      <hr>
+      <button id="export-btn">Ekspor data (.json)</button>
+      <button id="ics-btn">Ekspor ke kalender (.ics)</button>
+      <button id="import-btn">Impor data (.json)</button>
+      <hr>
+      <button id="reset-btn" style="color:var(--danger);">Hapus semua data</button>
+    </div>
+  </div>
+  <input type="file" id="file-input" accept="application/json">
+</div>
+
+<div class="summary-panel" id="summary-panel" style="display:none;">
+  <h3>Jam kuliah per hari</h3>
+  <div id="summary-body"></div>
+</div>
+
+<main id="main-content"></main>
+
+<footer class="app-footer">&copy; 2026 SIAHAAN22 &middot; Roster Kuliah</footer>
+
+<!-- Modal: tambah/edit -->
+<div class="overlay" id="form-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="form-title">Tambah mata kuliah</h2>
+      <button class="btn btn-ghost" id="form-close">✕</button>
+    </div>
+    <form id="course-form">
+      <div class="modal-body">
+        <div id="conflict-note" class="conflict-note" style="display:none;"></div>
+        <div class="field">
+          <label for="f-nama">Nama mata kuliah</label>
+          <input id="f-nama" required maxlength="60" placeholder="mis. Rangkaian Listrik">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-kelas">Kelas</label>
+            <input id="f-kelas" maxlength="20" placeholder="mis. TE A2">
+          </div>
+          <div class="field">
+            <label for="f-ruang">Ruang</label>
+            <input id="f-ruang" maxlength="30" placeholder="mis. Lab. Elektro 2 / Daring">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-dosen">Dosen</label>
+          <input id="f-dosen" maxlength="50" placeholder="mis. Dr. Ir. ...">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-hari">Hari</label>
+            <select id="f-hari">
+              <option>Senin</option><option>Selasa</option><option>Rabu</option>
+              <option>Kamis</option><option>Jumat</option><option>Sabtu</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-sks">SKS</label>
+            <input id="f-sks" type="number" min="1" max="6" value="2">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-mulai">Jam mulai</label>
+            <input id="f-mulai" type="time" required>
+          </div>
+          <div class="field">
+            <label for="f-selesai">Jam selesai</label>
+            <input id="f-selesai" type="time" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Warna</label>
+          <div class="swatches" id="swatches"></div>
+        </div>
+        <div class="field">
+          <label for="f-catatan">Catatan / materi kuliah (opsional)</label>
+          <textarea id="f-catatan" rows="3" maxlength="500" placeholder="Ringkasan silabus, buku wajib, atau catatan penting lainnya"></textarea>
+        </div>
+        <div class="field">
+          <label for="f-nilai">Nilai</label>
+          <select id="f-nilai">
+            <option value="">Belum ada nilai</option>
+            <option>A</option><option>A-</option><option>B+</option><option>B</option>
+            <option>B-</option><option>C+</option><option>C</option><option>D</option><option>E</option>
+          </select>
+        </div>
+        <div class="field attendance-block" id="tugas-block" style="display:none;">
+          <label>Tugas</label>
+          <div id="tugas-list"></div>
+          <div class="attendance-row">
+            <input type="text" id="tugas-judul-input" placeholder="Judul tugas">
+            <input type="date" id="tugas-deadline-input">
+            <button type="button" class="btn" id="tugas-add-btn">Tambah</button>
+          </div>
+        </div>
+        <div class="field attendance-block" id="attendance-block" style="display:none;">
+          <label>Riwayat pertemuan <span id="attendance-count"></span></label>
+          <div id="attendance-history"></div>
+          <div class="attendance-row">
+            <input type="text" id="attendance-materi-input" placeholder="Isi/materi pertemuan hari ini (opsional)">
+            <button type="button" class="btn" id="attendance-save-btn">Tandai hadir hari ini</button>
+          </div>
+          <button type="button" class="attendance-cancel-btn" id="attendance-cancel-btn" style="display:none;">Batalkan tanda hari ini</button>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <div class="left">
+          <button type="button" class="btn" id="duplicate-course-btn" style="display:none;">Duplikat</button>
+          <button type="button" class="btn" id="delete-course-btn" style="display:none;color:var(--danger);">Hapus</button>
+        </div>
+        <div class="right">
+          <button type="button" class="btn" id="form-cancel">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: kelola semester -->
+<div class="overlay" id="semester-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Kelola Semester</h2>
+      <button class="btn btn-ghost" id="semester-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="semester-list"></div>
+      <div class="attendance-row" style="margin-top:12px;">
+        <input type="text" id="new-semester-input" placeholder="Nama semester baru, mis. Genap 2026/2027">
+        <button type="button" class="btn btn-primary" id="add-semester-btn">Tambah</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: konfirmasi generik (selalu di atas modal lain, termasuk Kelola Semester) -->
+<div class="overlay" id="confirm-overlay">
+  <div class="modal confirm-modal">
+    <div class="modal-head"><h2 id="confirm-title">Konfirmasi</h2></div>
+    <div class="modal-body"><p id="confirm-message"></p></div>
+    <div class="modal-foot">
+      <div></div>
+      <div class="right">
+        <button class="btn" id="confirm-cancel">Batal</button>
+        <button class="btn btn-primary" id="confirm-ok">Ya, lanjutkan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: input teks generik (tambah/ubah nama semester) -->
+<div class="overlay" id="input-overlay">
+  <div class="modal confirm-modal">
+    <div class="modal-head"><h2 id="input-title">Input</h2></div>
+    <div class="modal-body">
+      <input type="text" id="input-field" maxlength="60">
+    </div>
+    <div class="modal-foot">
+      <div></div>
+      <div class="right">
+        <button class="btn" id="input-cancel">Batal</button>
+        <button class="btn btn-primary" id="input-ok">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+(function(){
+  "use strict";
+
+  var DAYS = ["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+  var DAY_START = 7*60;
+  var DAY_END = 21*60;
+  var HOUR_PX = 52;
+  var COLORS = ["#5B7DB1","#6B8F71","#B1725B","#8B6BA8","#C9A227","#4F9DA6","#B15B7D"];
+  var KEY_COURSES = "rosterKuliah_courses_v1";
+  var KEY_SETTINGS = "rosterKuliah_settings_v1";
+  var KEY_SEMESTERS = "rosterKuliah_semesters_v1";
+  var KEY_ACTIVE = "rosterKuliah_active_semester_v1";
+  var GRADE_POINTS = {"A":4,"A-":3.7,"B+":3.3,"B":3,"B-":2.7,"C+":2.3,"C":2,"D":1,"E":0};
+
+  var state = {
+    semesters: [],
+    activeSemesterId: null,
+    courses: [],
+    settings: { theme:"light", notifMinutes:15, notifOn:false },
+    view: "grid",
+    search: "",
+    dayFilter: "",
+    editingId: null,
+    notified: {}
+  };
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  // ---------- storage (localStorage) ----------
+  function loadLocal(key, fallback){
+    try{
+      var raw = localStorage.getItem(key);
+      if(!raw) return fallback;
+      return JSON.parse(raw);
+    }catch(e){ console.error(e); return fallback; }
+  }
+  function saveLocal(key, value){
+    try{
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    }catch(e){
+      console.error(e);
+      showToast("Gagal menyimpan (mode privat atau penyimpanan penuh?)");
+      return false;
+    }
+  }
+  function saveSemesters(){ saveLocal(KEY_SEMESTERS, state.semesters); }
+  function saveCourses(){
+    var sem = currentSemester();
+    if(sem) sem.courses = state.courses;
+    saveSemesters();
+  }
+  function saveSettings(){ saveLocal(KEY_SETTINGS, state.settings); }
+
+  function currentSemester(){
+    return state.semesters.find(function(s){ return s.id===state.activeSemesterId; }) || state.semesters[0];
+  }
+  function switchSemester(id){
+    state.activeSemesterId = id;
+    state.courses = currentSemester().courses;
+    saveLocal(KEY_ACTIVE, id);
+    updateSemesterPill();
+    render();
+  }
+  function updateSemesterPill(){
+    var sem = currentSemester();
+    $("semester-pill").textContent = (sem && sem.nama) ? sem.nama : "Semester";
+  }
+  function calcIP(courseList){
+    var totalSks=0, totalBobot=0;
+    courseList.forEach(function(c){
+      if(c.nilai && GRADE_POINTS.hasOwnProperty(c.nilai) && (+c.sks)>0){
+        totalSks += (+c.sks);
+        totalBobot += (+c.sks) * GRADE_POINTS[c.nilai];
+      }
+    });
+    return totalSks>0 ? (totalBobot/totalSks) : null;
+  }
+
+  function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+  function pad(n){ return (n<10?"0":"")+n; }
+  function toMin(t){ var p=t.split(":"); return (+p[0])*60+(+p[1]); }
+  function fmtMin(m){ var h=Math.floor(m/60), mm=m%60; return pad(h)+":"+pad(mm); }
+  function isoDateLocal(d){ d=d||new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+  function escapeHtml(s){
+    return (s||"").replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  // ---------- derived data ----------
+  function filteredCourses(){
+    var q = state.search.trim().toLowerCase();
+    return state.courses.filter(function(c){
+      var matchQ = !q || (c.nama||"").toLowerCase().indexOf(q)>-1 || (c.dosen||"").toLowerCase().indexOf(q)>-1;
+      var matchDay = !state.dayFilter || c.hari===state.dayFilter;
+      return matchQ && matchDay;
+    });
+  }
+  function todayName(){
+    var map = {1:"Senin",2:"Selasa",3:"Rabu",4:"Kamis",5:"Jumat",6:"Sabtu"};
+    return map[new Date().getDay()] || null;
+  }
+
+  // ---------- rendering ----------
+  function render(){
+    renderStats();
+    renderTodayPanel();
+    checkBackupReminder();
+    renderSummary();
+    if(state.view==="grid") renderGrid();
+    else if(state.view==="tugas") renderTugasView();
+    else renderList();
+  }
+
+  function renderStats(){
+    $("stat-count").textContent = state.courses.length;
+    $("stat-sks").textContent = state.courses.reduce(function(a,c){ return a+(+c.sks||0); },0);
+    var ip = calcIP(state.courses);
+    $("stat-ip").textContent = ip===null ? "-" : ip.toFixed(2);
+    var allCourses = [];
+    state.semesters.forEach(function(s){ allCourses = allCourses.concat(s.courses||[]); });
+    var ipk = calcIP(allCourses);
+    $("stat-ipk").textContent = ipk===null ? "-" : ipk.toFixed(2);
+  }
+
+  function fmtDateLabel(d){
+    var bulan = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+    return d.getDate()+" "+bulan[d.getMonth()];
+  }
+
+  function renderTodayPanel(){
+    var panel = $("today-panel");
+    var now = new Date();
+    var nowMin = now.getHours()*60+now.getMinutes();
+    var today = todayName();
+    var todayIso = isoDateLocal();
+    var dayLabel = today || "Minggu";
+
+    var html = '<div class="today-head">Hari ini \u00b7 '+dayLabel+', '+fmtDateLabel(now)+'</div>';
+
+    var remaining = [];
+    var todaysClasses = [];
+    if(today){
+      todaysClasses = state.courses.filter(function(c){ return c.hari===today; }).sort(function(a,b){ return toMin(a.mulai)-toMin(b.mulai); });
+      remaining = todaysClasses.filter(function(c){ return toMin(c.selesai) > nowMin; });
+    }
+
+    if(remaining.length){
+      remaining.slice(0,4).forEach(function(c){
+        var ongoing = toMin(c.mulai)<=nowMin && toMin(c.selesai)>nowMin;
+        html += '<div class="today-item'+(ongoing?' ongoing':'')+'"><span class="ti-time">'+c.mulai+'</span>'+
+          '<span class="ti-title">'+escapeHtml(c.nama)+(c.ruang?(' \u00b7 '+escapeHtml(c.ruang)):'')+'</span>'+
+          (ongoing?'<span class="ti-badge">berlangsung</span>':'')+'</div>';
+      });
+      if(remaining.length>4) html += '<div class="today-more">+'+(remaining.length-4)+' lagi hari ini</div>';
+    } else if(today && todaysClasses.length){
+      html += '<div class="today-empty">Kelas hari ini udah kelar semua \ud83c\udf89</div>';
+    } else if(today){
+      html += '<div class="today-empty">Gak ada kelas hari ini.</div>';
+    } else {
+      html += '<div class="today-empty">Gak ada kelas hari Minggu.</div>';
+    }
+
+    if(remaining.length===0){
+      var todayIdx = DAYS.indexOf(today);
+      var best=null, bestDist=99;
+      state.courses.forEach(function(c){
+        var idx = DAYS.indexOf(c.hari);
+        if(idx<0) return;
+        var dist = todayIdx<0 ? idx : ((idx - todayIdx + DAYS.length) % DAYS.length);
+        if(dist===0) dist = DAYS.length;
+        if(dist<bestDist){ bestDist=dist; best=c; }
+      });
+      if(best){
+        html += '<div class="today-item"><span class="ti-badge">berikutnya</span><span class="ti-title">'+escapeHtml(best.nama)+' \u00b7 '+best.hari+' '+best.mulai+'</span></div>';
+      }
+    }
+
+    var taskItems = [];
+    state.courses.forEach(function(c){
+      (c.tugas||[]).forEach(function(t){
+        if(t.selesai || !t.deadline) return;
+        if(t.deadline<=todayIso) taskItems.push({t:t, courseName:c.nama});
+      });
+    });
+    taskItems.sort(function(a,b){ return (a.t.deadline||"").localeCompare(b.t.deadline||""); });
+    if(taskItems.length){
+      html += '<div class="today-subhead">Tugas mendesak</div>';
+      taskItems.slice(0,4).forEach(function(it){
+        var overdue = it.t.deadline<todayIso;
+        html += '<div class="today-item"><span class="ti-badge" style="'+(overdue?'color:#ffb4a8;':'')+'">'+(overdue?'telat':'hari ini')+'</span>'+
+          '<span class="ti-title">'+escapeHtml(it.t.judul)+' \u00b7 '+escapeHtml(it.courseName)+'</span></div>';
+      });
+      if(taskItems.length>4) html += '<div class="today-more">+'+(taskItems.length-4)+' tugas lainnya</div>';
+    }
+
+    panel.innerHTML = html;
+  }
+
+  function shouldShowBackupReminder(){
+    var totalCourses = state.semesters.reduce(function(a,s){ return a+(s.courses||[]).length; },0);
+    if(totalCourses===0) return false;
+    var today = new Date();
+    if(state.settings.backupSnoozeUntil && today < new Date(state.settings.backupSnoozeUntil)) return false;
+    var baseline = state.settings.lastBackupAt || state.settings.installedAt;
+    if(!baseline) return false;
+    var days = (today - new Date(baseline)) / 86400000;
+    return days >= 14;
+  }
+  function checkBackupReminder(){
+    var show = shouldShowBackupReminder();
+    $("backup-banner").style.display = show ? "flex" : "none";
+    if(show){
+      var baseline = state.settings.lastBackupAt || state.settings.installedAt;
+      var days = Math.floor((new Date() - new Date(baseline)) / 86400000);
+      $("backup-banner-text").textContent = state.settings.lastBackupAt
+        ? ("Sudah "+days+" hari sejak backup terakhir \u2014 yuk ekspor data biar aman.")
+        : ("Udah "+days+" hari pakai roster ini, belum pernah backup \u2014 yuk ekspor sekali biar aman.");
+    }
+  }
+  $("backup-now-btn").addEventListener("click", function(){ $("export-btn").click(); });
+  $("backup-snooze-btn").addEventListener("click", function(){
+    var d = new Date(); d.setDate(d.getDate()+7);
+    state.settings.backupSnoozeUntil = d.toISOString();
+    saveSettings();
+    $("backup-banner").style.display="none";
+  });
+
+  function renderSummary(){
+    var body = $("summary-body");
+    var totals = DAYS.map(function(day){
+      return state.courses.filter(function(c){ return c.hari===day; })
+        .reduce(function(a,c){ return a+Math.max(toMin(c.selesai)-toMin(c.mulai),0); },0);
+    });
+    var maxMin = Math.max.apply(null, totals.concat([1]));
+    body.innerHTML = DAYS.map(function(day,i){
+      var pct = (totals[i]/maxMin*100).toFixed(0);
+      var jam = (totals[i]/60).toFixed(1).replace(/\.0$/,"");
+      return '<div class="summary-row"><span class="summary-day">'+day+'</span>'+
+        '<div class="summary-bar-wrap"><div class="summary-bar" style="width:'+pct+'%;"></div></div>'+
+        '<span class="summary-hours">'+jam+' jam</span></div>';
+    }).join("");
+  }
+
+  function renderGrid(){
+    var main = $("main-content");
+    if(state.courses.length===0){ renderEmpty(main); return; }
+    var today = todayName();
+    var matchedIds = {};
+    filteredCourses().forEach(function(c){ matchedIds[c.id]=true; });
+
+    var html = '<div class="grid-scroll"><div class="timetable" style="--hour-px:'+HOUR_PX+'px;">';
+    html += '<div class="time-col"><div class="head-cell"></div><div style="height:'+((DAY_END-DAY_START)/60*HOUR_PX)+'px;position:relative;">';
+    for(var t=DAY_START;t<=DAY_END;t+=60){
+      html += '<div class="time-label" style="top:'+((t-DAY_START)/60*HOUR_PX)+'px;">'+fmtMin(t)+'</div>';
+    }
+    html += '</div></div>';
+
+    DAYS.forEach(function(day){
+      var isToday = day===today;
+      html += '<div class="day-col'+(isToday?' is-today':'')+'">';
+      html += '<div class="head-cell">'+day+'</div>';
+      html += '<div class="day-body" style="height:'+((DAY_END-DAY_START)/60*HOUR_PX)+'px;">';
+      state.courses.filter(function(c){ return c.hari===day; }).forEach(function(c){
+        var s = toMin(c.mulai), e = toMin(c.selesai);
+        if(e<=s) e = s+30;
+        var top = (s-DAY_START)/60*HOUR_PX;
+        var height = Math.max((e-s)/60*HOUR_PX, 42);
+        var matches = !!matchedIds[c.id];
+        var titleParts = [c.nama, c.mulai+'\u2013'+c.selesai+([c.kelas,c.ruang].filter(Boolean).map(function(v){return ' \u00b7 '+v;}).join(''))];
+        if(c.dosen) titleParts.push(c.dosen);
+        if(c.catatan) titleParts.push(c.catatan);
+        html += '<div class="course-block'+(matches?'':' is-filtered')+'" data-id="'+c.id+'" title="'+escapeHtml(titleParts.join('\n'))+'" '+
+          'style="top:'+top+'px;height:'+height+'px;left:4px;right:4px;border-left-color:'+c.warna+';">'+
+          '<span class="cb-title">'+escapeHtml(c.nama)+'</span>'+
+          '<span class="cb-meta">'+c.mulai+'–'+c.selesai+([c.kelas,c.ruang].filter(Boolean).map(function(v){return ' · '+escapeHtml(v);}).join(''))+'</span>'+
+          '</div>';
+      });
+      html += '</div></div>';
+    });
+    html += '</div></div>';
+    main.innerHTML = html;
+    main.querySelectorAll(".course-block").forEach(function(el){
+      el.addEventListener("click", function(){ openForm(el.getAttribute("data-id")); });
+    });
+  }
+
+  function renderList(){
+    var main = $("main-content");
+    if(state.courses.length===0){ renderEmpty(main); return; }
+    var list = filteredCourses();
+    if(list.length===0){
+      main.innerHTML = '<div class="empty-state"><h3>Tidak ditemukan</h3><p>Coba kata kunci atau filter hari lain.</p></div>';
+      return;
+    }
+    var html = "";
+    DAYS.forEach(function(day){
+      var dayCourses = list.filter(function(c){ return c.hari===day; }).sort(function(a,b){ return toMin(a.mulai)-toMin(b.mulai); });
+      if(dayCourses.length===0) return;
+      html += '<div class="day-group"><h3>'+day+'</h3>';
+      dayCourses.forEach(function(c){
+        var hadirCount = (c.hadirLog||[]).length;
+        var pendingTugas = (c.tugas||[]).filter(function(t){ return !t.selesai; }).length;
+        html += '<div class="course-row" data-id="'+c.id+'" style="border-left-color:'+c.warna+';">'+
+          '<div class="cr-time">'+c.mulai+'<br>'+c.selesai+'</div>'+
+          '<div class="cr-body"><div class="cr-title">'+escapeHtml(c.nama)+'</div>'+
+          '<div class="cr-meta">'+[c.kelas?("Kelas "+escapeHtml(c.kelas)):"",escapeHtml(c.dosen||""),escapeHtml(c.ruang||"")].filter(Boolean).join(" · ")+'</div>'+
+          (c.catatan ? '<div class="cr-catatan">'+escapeHtml(c.catatan)+'</div>' : '')+
+          (pendingTugas ? '<div class="cr-catatan" style="color:var(--accent);">'+pendingTugas+' tugas belum selesai</div>' : '')+'</div>'+
+          '<div class="cr-side">'+(c.sks||0)+' sks<span class="cr-hadir">'+hadirCount+'x hadir</span></div>'+
+          '</div>';
+      });
+      html += '</div>';
+    });
+    main.innerHTML = html;
+    main.querySelectorAll(".course-row").forEach(function(el){
+      el.addEventListener("click", function(){ openForm(el.getAttribute("data-id")); });
+    });
+  }
+
+  function renderEmpty(main){
+    main.innerHTML = '<div class="empty-state"><h3>Belum ada mata kuliah</h3>'+
+      '<p>Tambahkan jadwal kuliah pertamamu untuk mulai membangun roster mingguan.</p>'+
+      '<button class="btn btn-primary" id="empty-add-btn">Tambah mata kuliah</button></div>';
+    $("empty-add-btn").addEventListener("click", function(){ openForm(null); });
+  }
+
+  function renderTugasView(){
+    var main = $("main-content");
+    var todayIso = isoDateLocal();
+    var items = [];
+    state.courses.forEach(function(c){
+      (c.tugas||[]).forEach(function(t){
+        items.push({t:t, courseName:c.nama, courseId:c.id});
+      });
+    });
+    if(items.length===0){
+      main.innerHTML = '<div class="empty-state"><h3>Belum ada tugas</h3>'+
+        '<p>Tambahkan tugas lewat halaman edit tiap mata kuliah (bagian "Tugas").</p></div>';
+      return;
+    }
+    items.sort(function(a,b){
+      if(!!a.t.selesai !== !!b.t.selesai) return a.t.selesai ? 1 : -1;
+      return (a.t.deadline||"9999").localeCompare(b.t.deadline||"9999");
+    });
+    main.innerHTML = items.map(function(it){
+      var t = it.t;
+      var overdue = !t.selesai && t.deadline && t.deadline<todayIso;
+      var dueToday = !t.selesai && t.deadline===todayIso;
+      var borderColor = overdue ? "var(--danger)" : (dueToday ? "var(--accent)" : "var(--line)");
+      var titleStyle = t.selesai ? "text-decoration:line-through;color:var(--ink-soft);" : "";
+      var metaText = escapeHtml(it.courseName) + (t.deadline ? (' \u00b7 ' + (overdue?'Terlambat, ':'') + t.deadline) : ' \u00b7 tanpa tenggat');
+      return '<div class="course-row" data-course="'+it.courseId+'" style="border-left-color:'+borderColor+';">'+
+        '<input type="checkbox" class="tugas-view-check" data-course="'+it.courseId+'" data-task="'+t.id+'" '+(t.selesai?'checked':'')+' style="margin-top:3px;flex:none;">'+
+        '<div class="cr-body"><div class="cr-title" style="'+titleStyle+'">'+escapeHtml(t.judul)+'</div>'+
+        '<div class="cr-meta">'+metaText+'</div></div></div>';
+    }).join("");
+    main.querySelectorAll(".tugas-view-check").forEach(function(cb){
+      cb.addEventListener("click", function(e){ e.stopPropagation(); });
+      cb.addEventListener("change", function(){
+        var c = state.courses.find(function(x){ return x.id===cb.getAttribute("data-course"); });
+        if(!c) return;
+        var t = (c.tugas||[]).find(function(x){ return x.id===cb.getAttribute("data-task"); });
+        if(t){ t.selesai = cb.checked; saveCourses(); renderTugasView(); }
+      });
+    });
+    main.querySelectorAll(".course-row").forEach(function(row){
+      row.addEventListener("click", function(){ openForm(row.getAttribute("data-course")); });
+    });
+  }
+
+  // ---------- form modal ----------
+  function buildSwatches(selected){
+    var wrap = $("swatches");
+    wrap.innerHTML = "";
+    COLORS.forEach(function(hex){
+      var b = document.createElement("button");
+      b.type="button";
+      b.className="swatch"+(hex===selected?" selected":"");
+      b.style.background=hex;
+      b.setAttribute("data-hex",hex);
+      b.addEventListener("click", function(){
+        wrap.querySelectorAll(".swatch").forEach(function(s){ s.classList.remove("selected"); });
+        b.classList.add("selected");
+      });
+      wrap.appendChild(b);
+    });
+  }
+  function getSelectedSwatch(){
+    var el = $("swatches").querySelector(".swatch.selected");
+    return el ? el.getAttribute("data-hex") : COLORS[0];
+  }
+  function readFormValues(){
+    return {
+      nama: $("f-nama").value.trim(),
+      kelas: $("f-kelas").value.trim(),
+      dosen: $("f-dosen").value.trim(),
+      ruang: $("f-ruang").value.trim(),
+      hari: $("f-hari").value,
+      sks: +$("f-sks").value || 0,
+      mulai: $("f-mulai").value,
+      selesai: $("f-selesai").value,
+      warna: getSelectedSwatch(),
+      catatan: $("f-catatan").value.trim(),
+      nilai: $("f-nilai").value
+    };
+  }
+  function migrateHadirLog(log){
+    if(!Array.isArray(log)) return [];
+    return log.map(function(e){
+      if(typeof e === "string") return {tanggal:e, materi:""};
+      return {tanggal:e.tanggal||"", materi:e.materi||""};
+    }).filter(function(e){ return e.tanggal; });
+  }
+  function normalizeCourse(c){
+    c.hadirLog = migrateHadirLog(c.hadirLog);
+    if(typeof c.catatan !== "string") c.catatan = "";
+    if(typeof c.kelas !== "string") c.kelas = "";
+    if(typeof c.nilai !== "string") c.nilai = "";
+    if(!Array.isArray(c.tugas)) c.tugas = [];
+    return c;
+  }
+  function renderAttendanceHistory(course){
+    var log = (course.hadirLog||[]).slice().sort(function(a,b){ return a.tanggal<b.tanggal?1:-1; });
+    var el = $("attendance-history");
+    if(log.length===0){
+      el.innerHTML = '<div style="font-size:12px;color:var(--ink-soft);padding:2px 0;">Belum ada catatan pertemuan.</div>';
+      return;
+    }
+    el.innerHTML = log.map(function(e){
+      return '<div class="attendance-item"><span class="ai-date">'+e.tanggal+'</span>'+
+        '<span class="ai-materi">'+(e.materi ? escapeHtml(e.materi) : '<span style="color:var(--ink-soft);">(tanpa catatan)</span>')+'</span>'+
+        '<button type="button" class="ai-del" data-date="'+e.tanggal+'">Hapus</button></div>';
+    }).join("");
+    el.querySelectorAll(".ai-del").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var c = state.courses.find(function(x){ return x.id===state.editingId; });
+        if(!c) return;
+        var d = btn.getAttribute("data-date");
+        c.hadirLog = (c.hadirLog||[]).filter(function(e){ return e.tanggal!==d; });
+        saveCourses();
+        refreshAttendanceUI(c);
+        render();
+      });
+    });
+  }
+  function refreshAttendanceUI(course){
+    if(!course){ $("attendance-block").style.display="none"; return; }
+    $("attendance-block").style.display="block";
+    var log = course.hadirLog||[];
+    $("attendance-count").textContent = "("+log.length+" kali hadir)";
+    var today = isoDateLocal();
+    var todayEntry = log.find(function(e){ return e.tanggal===today; });
+    $("attendance-materi-input").value = todayEntry ? (todayEntry.materi||"") : "";
+    $("attendance-save-btn").textContent = todayEntry ? "Perbarui catatan hari ini" : "Tandai hadir hari ini";
+    $("attendance-cancel-btn").style.display = todayEntry ? "inline-block" : "none";
+    renderAttendanceHistory(course);
+  }
+
+  function renderTugasList(course){
+    var wrap = $("tugas-list");
+    var tasks = (course.tugas||[]).slice().sort(function(a,b){ return (a.deadline||"9999").localeCompare(b.deadline||"9999"); });
+    if(tasks.length===0){
+      wrap.innerHTML = '<div style="font-size:12px;color:var(--ink-soft);padding:2px 0;">Belum ada tugas.</div>';
+      return;
+    }
+    var todayIso = isoDateLocal();
+    wrap.innerHTML = tasks.map(function(t){
+      var overdue = !t.selesai && t.deadline && t.deadline<todayIso;
+      var style = (t.selesai ? "text-decoration:line-through;color:var(--ink-soft);" : (overdue ? "color:var(--danger);" : ""));
+      return '<div class="attendance-item"><input type="checkbox" class="tugas-check" data-id="'+t.id+'" '+(t.selesai?'checked':'')+' style="margin-top:2px;flex:none;">'+
+        '<span class="ai-materi" style="'+style+'">'+escapeHtml(t.judul)+(t.deadline?(' \u00b7 '+t.deadline):'')+'</span>'+
+        '<button type="button" class="ai-del tugas-del" data-id="'+t.id+'">Hapus</button></div>';
+    }).join("");
+    wrap.querySelectorAll(".tugas-check").forEach(function(cb){
+      cb.addEventListener("change", function(){
+        var c = state.courses.find(function(x){ return x.id===state.editingId; });
+        if(!c) return;
+        var t = (c.tugas||[]).find(function(x){ return x.id===cb.getAttribute("data-id"); });
+        if(t){ t.selesai = cb.checked; saveCourses(); renderTugasList(c); render(); }
+      });
+    });
+    wrap.querySelectorAll(".tugas-del").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var c = state.courses.find(function(x){ return x.id===state.editingId; });
+        if(!c) return;
+        var d = btn.getAttribute("data-id");
+        c.tugas = (c.tugas||[]).filter(function(x){ return x.id!==d; });
+        saveCourses(); renderTugasList(c); render();
+      });
+    });
+  }
+
+  function openForm(id){
+    state.editingId = id;
+    $("conflict-note").style.display="none";
+    $("course-form").dataset.confirmed = "";
+    if(id){
+      var c = state.courses.find(function(x){ return x.id===id; });
+      $("form-title").textContent = "Edit mata kuliah";
+      $("f-nama").value = c.nama||"";
+      $("f-kelas").value = c.kelas||"";
+      $("f-dosen").value = c.dosen||"";
+      $("f-ruang").value = c.ruang||"";
+      $("f-hari").value = c.hari;
+      $("f-sks").value = c.sks||2;
+      $("f-mulai").value = c.mulai;
+      $("f-selesai").value = c.selesai;
+      $("f-catatan").value = c.catatan||"";
+      $("f-nilai").value = c.nilai||"";
+      buildSwatches(c.warna);
+      $("delete-course-btn").style.display="inline-block";
+      $("duplicate-course-btn").style.display="inline-block";
+      $("tugas-block").style.display="block";
+      renderTugasList(c);
+      refreshAttendanceUI(c);
+    } else {
+      $("form-title").textContent = "Tambah mata kuliah";
+      $("course-form").reset();
+      $("f-hari").value="Senin"; $("f-sks").value=2;
+      $("f-mulai").value="08:00"; $("f-selesai").value="09:40";
+      $("f-catatan").value="";
+      $("f-nilai").value="";
+      buildSwatches(COLORS[state.courses.length % COLORS.length]);
+      $("delete-course-btn").style.display="none";
+      $("duplicate-course-btn").style.display="none";
+      $("tugas-block").style.display="none";
+      refreshAttendanceUI(null);
+    }
+    $("form-overlay").classList.add("open");
+  }
+  function closeForm(){ $("form-overlay").classList.remove("open"); }
+
+  function findConflicts(day, mulai, selesai, excludeId){
+    var s=toMin(mulai), e=toMin(selesai);
+    return state.courses.filter(function(c){
+      if(c.id===excludeId || c.hari!==day) return false;
+      var cs=toMin(c.mulai), ce=toMin(c.selesai);
+      return s<ce && e>cs;
+    });
+  }
+
+  $("course-form").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var base = readFormValues();
+    if(toMin(base.selesai) <= toMin(base.mulai)){
+      $("conflict-note").style.display="block";
+      $("conflict-note").textContent = "Jam selesai harus setelah jam mulai.";
+      return;
+    }
+    var conflicts = findConflicts(base.hari, base.mulai, base.selesai, state.editingId);
+    if(conflicts.length && !ev.target.dataset.confirmed){
+      $("conflict-note").style.display="block";
+      $("conflict-note").textContent = "Bentrok dengan "+conflicts.map(function(c){return c.nama;}).join(", ")+
+        " di hari yang sama. Tekan Simpan sekali lagi untuk tetap menyimpan.";
+      ev.target.dataset.confirmed="1";
+      return;
+    }
+    ev.target.dataset.confirmed="";
+    if(state.editingId){
+      var idx = state.courses.findIndex(function(c){ return c.id===state.editingId; });
+      state.courses[idx] = Object.assign({}, state.courses[idx], base, {id: state.editingId});
+    } else {
+      state.courses.push(Object.assign({id: uid(), hadirLog:[], tugas:[]}, base));
+    }
+    saveCourses();
+    closeForm();
+    render();
+    showToast("Jadwal disimpan");
+  });
+
+  $("duplicate-course-btn").addEventListener("click", function(){
+    if(!state.editingId) return;
+    var base = readFormValues();
+    var copy = Object.assign({id: uid(), hadirLog:[], tugas:[]}, base);
+    state.courses.push(copy);
+    saveCourses();
+    state.editingId = copy.id;
+    $("form-title").textContent = "Edit mata kuliah (salinan)";
+    $("conflict-note").style.display="none";
+    $("tugas-block").style.display="block";
+    renderTugasList(copy);
+    refreshAttendanceUI(copy);
+    render();
+    showToast("Disalin — sesuaikan hari/jam lalu simpan");
+  });
+
+  $("attendance-save-btn").addEventListener("click", function(){
+    var c = state.courses.find(function(x){ return x.id===state.editingId; });
+    if(!c) return;
+    c.hadirLog = c.hadirLog||[];
+    var today = isoDateLocal();
+    var materi = $("attendance-materi-input").value.trim();
+    var idx = c.hadirLog.findIndex(function(e){ return e.tanggal===today; });
+    if(idx>-1) c.hadirLog[idx].materi = materi; else c.hadirLog.push({tanggal:today, materi:materi});
+    saveCourses();
+    refreshAttendanceUI(c);
+    render();
+    showToast("Kehadiran & catatan hari ini disimpan");
+  });
+  $("attendance-cancel-btn").addEventListener("click", function(){
+    var c = state.courses.find(function(x){ return x.id===state.editingId; });
+    if(!c) return;
+    var today = isoDateLocal();
+    c.hadirLog = (c.hadirLog||[]).filter(function(e){ return e.tanggal!==today; });
+    saveCourses();
+    refreshAttendanceUI(c);
+    render();
+  });
+
+  $("tugas-add-btn").addEventListener("click", function(){
+    var c = state.courses.find(function(x){ return x.id===state.editingId; });
+    if(!c) return;
+    var judul = $("tugas-judul-input").value.trim();
+    if(!judul){ showToast("Isi judul tugas dulu"); return; }
+    var deadline = $("tugas-deadline-input").value;
+    c.tugas = c.tugas||[];
+    c.tugas.push({id: uid(), judul: judul, deadline: deadline, selesai: false});
+    $("tugas-judul-input").value=""; $("tugas-deadline-input").value="";
+    saveCourses();
+    renderTugasList(c);
+    render();
+    showToast("Tugas ditambahkan");
+  });
+
+  $("delete-course-btn").addEventListener("click", function(){
+    var id = state.editingId;
+    closeForm();
+    askConfirm("Hapus mata kuliah", "Yakin ingin menghapus jadwal ini? Tindakan ini tidak bisa dibatalkan.", function(){
+      state.courses = state.courses.filter(function(c){ return c.id!==id; });
+      saveCourses();
+      render();
+      showToast("Jadwal dihapus");
+    });
+  });
+
+  $("form-close").addEventListener("click", closeForm);
+  $("form-cancel").addEventListener("click", closeForm);
+  $("form-overlay").addEventListener("click", function(e){ if(e.target===$("form-overlay")) closeForm(); });
+  $("add-btn").addEventListener("click", function(){ openForm(null); });
+
+  // ---------- confirm modal ----------
+  var pendingConfirm = null;
+  function askConfirm(title, msg, onOk){
+    $("confirm-title").textContent = title;
+    $("confirm-message").textContent = msg;
+    pendingConfirm = onOk;
+    $("confirm-overlay").classList.add("open");
+  }
+  $("confirm-ok").addEventListener("click", function(){
+    $("confirm-overlay").classList.remove("open");
+    if(pendingConfirm) pendingConfirm();
+    pendingConfirm=null;
+  });
+  $("confirm-cancel").addEventListener("click", function(){
+    $("confirm-overlay").classList.remove("open");
+    pendingConfirm=null;
+  });
+  $("confirm-overlay").addEventListener("click", function(e){
+    if(e.target===$("confirm-overlay")){ $("confirm-overlay").classList.remove("open"); pendingConfirm=null; }
+  });
+
+  // ---------- input modal generik (tambah/ubah nama semester) ----------
+  var pendingInput = null;
+  function askInput(title, defaultValue, onOk){
+    $("input-title").textContent = title;
+    $("input-field").value = defaultValue||"";
+    pendingInput = onOk;
+    $("input-overlay").classList.add("open");
+    setTimeout(function(){ $("input-field").focus(); }, 60);
+  }
+  $("input-ok").addEventListener("click", function(){
+    var val = $("input-field").value;
+    $("input-overlay").classList.remove("open");
+    if(pendingInput) pendingInput(val);
+    pendingInput=null;
+  });
+  $("input-cancel").addEventListener("click", function(){
+    $("input-overlay").classList.remove("open");
+    pendingInput=null;
+  });
+  $("input-overlay").addEventListener("click", function(e){
+    if(e.target===$("input-overlay")){ $("input-overlay").classList.remove("open"); pendingInput=null; }
+  });
+
+  // ---------- kelola semester ----------
+  function renderSemesterList(){
+    var wrap = $("semester-list");
+    wrap.innerHTML = state.semesters.map(function(s){
+      var sks = (s.courses||[]).reduce(function(a,c){ return a+(+c.sks||0); },0);
+      var active = s.id===state.activeSemesterId;
+      return '<div class="semester-row'+(active?' active':'')+'" data-id="'+s.id+'">'+
+        '<div class="sr-name" data-act="switch">'+escapeHtml(s.nama)+'<span class="sr-meta">'+(s.courses||[]).length+' matkul \u00b7 '+sks+' sks</span></div>'+
+        '<button type="button" data-act="rename">Ubah nama</button>'+
+        (state.semesters.length>1 ? '<button type="button" class="sr-del" data-act="delete">Hapus</button>' : '')+
+        '</div>';
+    }).join("");
+    wrap.querySelectorAll(".semester-row").forEach(function(row){
+      var id = row.getAttribute("data-id");
+      row.querySelector('[data-act="switch"]').addEventListener("click", function(){
+        switchSemester(id);
+        $("semester-overlay").classList.remove("open");
+      });
+      var renameBtn = row.querySelector('[data-act="rename"]');
+      if(renameBtn) renameBtn.addEventListener("click", function(){
+        var s = state.semesters.find(function(x){ return x.id===id; });
+        askInput("Ubah nama semester", s?s.nama:"", function(val){
+          val = (val||"").trim();
+          if(!val) return;
+          var sem = state.semesters.find(function(x){ return x.id===id; });
+          if(sem){ sem.nama=val; saveSemesters(); renderSemesterList(); updateSemesterPill(); }
+        });
+      });
+      var delBtn = row.querySelector('[data-act="delete"]');
+      if(delBtn) delBtn.addEventListener("click", function(){
+        askConfirm("Hapus semester", "Semua mata kuliah di semester ini akan ikut terhapus permanen. Lanjutkan?", function(){
+          state.semesters = state.semesters.filter(function(x){ return x.id!==id; });
+          if(state.activeSemesterId===id) state.activeSemesterId = state.semesters[0].id;
+          state.courses = currentSemester().courses;
+          saveSemesters();
+          saveLocal(KEY_ACTIVE, state.activeSemesterId);
+          renderSemesterList();
+          updateSemesterPill();
+          render();
+        });
+      });
+    });
+  }
+  $("semester-pill").addEventListener("click", function(){
+    renderSemesterList();
+    $("semester-overlay").classList.add("open");
+  });
+  $("semester-close").addEventListener("click", function(){ $("semester-overlay").classList.remove("open"); });
+  $("semester-overlay").addEventListener("click", function(e){ if(e.target===$("semester-overlay")) $("semester-overlay").classList.remove("open"); });
+  $("add-semester-btn").addEventListener("click", function(){
+    var val = $("new-semester-input").value.trim();
+    if(!val){ showToast("Isi nama semester dulu"); return; }
+    var newSem = { id: uid(), nama: val, courses: [] };
+    state.semesters.push(newSem);
+    $("new-semester-input").value="";
+    saveSemesters();
+    switchSemester(newSem.id);
+    renderSemesterList();
+    showToast("Semester baru dibuat");
+  });
+
+  // ---------- toolbar ----------
+  $("search-input").addEventListener("input", function(e){ state.search = e.target.value; render(); });
+  $("day-filter").addEventListener("change", function(e){ state.dayFilter = e.target.value; render(); });
+  function setActiveViewBtn(view){
+    $("view-grid-btn").classList.toggle("active", view==="grid");
+    $("view-list-btn").classList.toggle("active", view==="list");
+    $("view-tugas-btn").classList.toggle("active", view==="tugas");
+  }
+  $("view-grid-btn").addEventListener("click", function(){ state.view="grid"; setActiveViewBtn("grid"); render(); });
+  $("view-list-btn").addEventListener("click", function(){ state.view="list"; setActiveViewBtn("list"); render(); });
+  $("view-tugas-btn").addEventListener("click", function(){ state.view="tugas"; setActiveViewBtn("tugas"); render(); });
+  $("menu-btn").addEventListener("click", function(e){ e.stopPropagation(); $("menu-dropdown").classList.toggle("open"); });
+  document.addEventListener("click", function(){ $("menu-dropdown").classList.remove("open"); });
+
+  
+  $("summary-btn").addEventListener("click", function(){
+    var panel = $("summary-panel");
+    var showing = panel.style.display!=="none";
+    panel.style.display = showing ? "none":"block";
+    $("summary-btn").textContent = showing ? "Tampilkan ringkasan minggu" : "Sembunyikan ringkasan minggu";
+    if(!showing) renderSummary();
+    $("menu-dropdown").classList.remove("open");
+  });
+
+  function applyTheme(){
+    document.documentElement.setAttribute("data-theme", state.settings.theme);
+    $("theme-btn").textContent = state.settings.theme==="dark" ? "Ganti ke mode terang" : "Ganti ke mode gelap";
+  }
+  $("theme-btn").addEventListener("click", function(){
+    state.settings.theme = state.settings.theme==="dark" ? "light":"dark";
+    applyTheme();
+    saveSettings();
+  });
+
+  $("print-btn").addEventListener("click", function(){ window.print(); });
+
+  function downloadBlob(content, filename, mime){
+    var blob = new Blob([content], {type:mime});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+
+  $("export-btn").addEventListener("click", function(){
+    var payload = { semesters: state.semesters, activeSemesterId: state.activeSemesterId, settings: state.settings, exportedAt: new Date().toISOString() };
+    var d = new Date();
+    var stamp = d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+    downloadBlob(JSON.stringify(payload,null,2), "roster-kuliah-backup-"+stamp+".json", "application/json");
+    state.settings.lastBackupAt = new Date().toISOString();
+    state.settings.backupSnoozeUntil = "";
+    saveSettings();
+    $("backup-banner").style.display="none";
+  });
+
+  function icsEscape(s){
+    return (s||"").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
+  }
+  function buildICS(courses){
+    var dayCode = {Senin:"MO",Selasa:"TU",Rabu:"WE",Kamis:"TH",Jumat:"FR",Sabtu:"SA"};
+    var jsDay = {Senin:1,Selasa:2,Rabu:3,Kamis:4,Jumat:5,Sabtu:6};
+    var lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//RosterKuliah//ID","CALSCALE:GREGORIAN"];
+    var now = new Date();
+    courses.forEach(function(c){
+      var target = jsDay[c.hari];
+      if(target===undefined) return;
+      var diff = (target - now.getDay() + 7) % 7;
+      var start = new Date(now.getFullYear(), now.getMonth(), now.getDate()+diff);
+      var mp = c.mulai.split(":"), ep = c.selesai.split(":");
+      start.setHours(+mp[0], +mp[1], 0, 0);
+      var end = new Date(start);
+      end.setHours(+ep[0], +ep[1], 0, 0);
+      if(end<=start) end = new Date(start.getTime()+30*60000);
+      function fmt(dt){
+        return dt.getFullYear()+pad(dt.getMonth()+1)+pad(dt.getDate())+"T"+pad(dt.getHours())+pad(dt.getMinutes())+"00";
+      }
+      var desc = [];
+      if(c.kelas) desc.push("Kelas: "+c.kelas);
+      if(c.dosen) desc.push("Dosen: "+c.dosen);
+      if(c.sks) desc.push(c.sks+" sks");
+      if(c.catatan) desc.push(c.catatan);
+      lines.push("BEGIN:VEVENT");
+      lines.push("UID:"+c.id+"@roster-kuliah");
+      lines.push("DTSTART:"+fmt(start));
+      lines.push("DTEND:"+fmt(end));
+      lines.push("RRULE:FREQ=WEEKLY;BYDAY="+dayCode[c.hari]+";COUNT=16");
+      lines.push("SUMMARY:"+icsEscape(c.nama));
+      if(desc.length) lines.push("DESCRIPTION:"+icsEscape(desc.join(" | ")));
+      if(c.ruang) lines.push("LOCATION:"+icsEscape(c.ruang));
+      lines.push("END:VEVENT");
+    });
+    lines.push("END:VCALENDAR");
+    return lines.join("\r\n");
+  }
+  $("ics-btn").addEventListener("click", function(){
+    if(state.courses.length===0){ showToast("Belum ada jadwal untuk diekspor"); return; }
+    downloadBlob(buildICS(state.courses), "roster-kuliah.ics", "text/calendar;charset=utf-8");
+    showToast("File .ics diunduh — impor ke Google/Apple Calendar");
+  });
+
+  $("import-btn").addEventListener("click", function(){ $("file-input").click(); });
+  $("file-input").addEventListener("change", function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      var parsed;
+      try{ parsed = JSON.parse(reader.result); }
+      catch(err){ showToast("File tidak valid"); return; }
+
+      if(parsed && Array.isArray(parsed.semesters)){
+        askConfirm("Impor backup", "Ditemukan "+parsed.semesters.length+" semester dalam file ini. Ini akan MENGGANTI semua semester yang ada sekarang. Lanjutkan?", function(){
+          state.semesters = parsed.semesters.map(function(s){
+            return { id: s.id||uid(), nama: s.nama||"Semester", courses: (s.courses||[]).map(normalizeCourse) };
+          });
+          if(state.semesters.length===0) state.semesters=[{id:uid(),nama:"Semester 1",courses:[]}];
+          state.activeSemesterId = (parsed.activeSemesterId && state.semesters.find(function(s){return s.id===parsed.activeSemesterId;})) ? parsed.activeSemesterId : state.semesters[0].id;
+          state.courses = currentSemester().courses;
+          saveSemesters();
+          saveLocal(KEY_ACTIVE, state.activeSemesterId);
+          updateSemesterPill();
+          render();
+          showToast("Backup berhasil diimpor");
+        });
+        return;
+      }
+
+      var incoming = Array.isArray(parsed) ? parsed : parsed.courses;
+      if(!Array.isArray(incoming)){ showToast("Format data tidak dikenali"); return; }
+      incoming = incoming.filter(function(c){ return c && c.nama && c.hari && c.mulai && c.selesai; })
+        .map(function(c){ return normalizeCourse({
+          id: uid(), nama:c.nama, kelas:c.kelas||"", dosen:c.dosen||"", ruang:c.ruang||"",
+          hari:c.hari, sks:+c.sks||0, mulai:c.mulai, selesai:c.selesai,
+          warna:c.warna||COLORS[0], catatan: c.catatan||"", hadirLog: c.hadirLog, nilai: c.nilai||"", tugas: c.tugas
+        });});
+      askConfirm("Impor data", "Ditemukan "+incoming.length+" mata kuliah. Gabungkan ke semester aktif (\u201c"+currentSemester().nama+"\u201d)?", function(){
+        state.courses = state.courses.concat(incoming);
+        saveCourses();
+        render();
+        showToast("Data berhasil diimpor");
+      });
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+
+  $("reset-btn").addEventListener("click", function(){
+    askConfirm("Hapus semua data", "Semua mata kuliah pada semester AKTIF akan dihapus permanen dari peramban ini (semester lain tidak terpengaruh). Lanjutkan?", function(){
+      state.courses = [];
+      saveCourses();
+      render();
+      showToast("Semua data semester ini dihapus");
+    });
+  });
+
+  $("notif-btn").addEventListener("click", function(){
+    if(!("Notification" in window)){ showToast("Peramban tidak mendukung notifikasi"); return; }
+    if(Notification.permission === "granted"){
+      state.settings.notifOn = !state.settings.notifOn;
+      $("notif-btn").textContent = state.settings.notifOn ? "Matikan pengingat":"Aktifkan pengingat";
+      saveSettings();
+      showToast(state.settings.notifOn ? "Pengingat diaktifkan" : "Pengingat dimatikan");
+      return;
+    }
+    Notification.requestPermission().then(function(perm){
+      if(perm==="granted"){
+        state.settings.notifOn = true;
+        $("notif-btn").textContent = "Matikan pengingat";
+        saveSettings();
+        showToast("Pengingat diaktifkan");
+      } else {
+        showToast("Izin notifikasi ditolak");
+      }
+    });
+  });
+
+  function checkReminders(){
+    if(!state.settings.notifOn || !("Notification" in window) || Notification.permission!=="granted") return;
+    var today = todayName();
+    if(!today) return;
+    var now = new Date();
+    var nowMin = now.getHours()*60+now.getMinutes();
+    var dateKey = now.toDateString();
+    state.courses.filter(function(c){ return c.hari===today; }).forEach(function(c){
+      var diff = toMin(c.mulai) - nowMin;
+      var key = c.id+"_"+dateKey;
+      if(diff>=0 && diff<=state.settings.notifMinutes && !state.notified[key]){
+        state.notified[key]=true;
+        try{
+          new Notification("Segera dimulai: "+c.nama, {
+            body: c.mulai+"–"+c.selesai+(c.ruang?(" · "+c.ruang):"")+(c.dosen?(" · "+c.dosen):"")
+          });
+        }catch(e){}
+      }
+    });
+  }
+  function checkTaskReminders(){
+    if(!state.settings.notifOn || !("Notification" in window) || Notification.permission!=="granted") return;
+    var todayIso = isoDateLocal();
+    var tomorrowDate = new Date(); tomorrowDate.setDate(tomorrowDate.getDate()+1);
+    var tomorrowIso = isoDateLocal(tomorrowDate);
+    state.courses.forEach(function(c){
+      (c.tugas||[]).forEach(function(t){
+        if(t.selesai || !t.deadline) return;
+        if(t.deadline===todayIso || t.deadline===tomorrowIso){
+          var key = "tugas_"+t.id+"_"+todayIso;
+          if(!state.notified[key]){
+            state.notified[key]=true;
+            try{
+              new Notification((t.deadline===todayIso?"Deadline hari ini: ":"Deadline besok: ")+t.judul, { body: c.nama });
+            }catch(e){}
+          }
+        }
+      });
+    });
+  }
+  setInterval(function(){ checkReminders(); checkTaskReminders(); renderTodayPanel(); }, 30000);
+
+  var toastTimer=null;
+  function showToast(msg){
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2400);
+  }
+
+  // ---------- init ----------
+  function init(){
+    var savedSemesters = loadLocal(KEY_SEMESTERS, null);
+    if(savedSemesters && Array.isArray(savedSemesters) && savedSemesters.length){
+      state.semesters = savedSemesters.map(function(s){
+        s.id = s.id || uid();
+        s.nama = s.nama || "Semester";
+        s.courses = (s.courses||[]).map(normalizeCourse);
+        return s;
+      });
+    } else {
+      var oldSettings = loadLocal(KEY_SETTINGS, {});
+      var oldCourses = (loadLocal(KEY_COURSES, [])||[]).map(normalizeCourse);
+      state.semesters = [{ id: uid(), nama: (oldSettings.semester && oldSettings.semester.trim()) || "Semester 1", courses: oldCourses }];
+    }
+    var savedActive = loadLocal(KEY_ACTIVE, null);
+    state.activeSemesterId = (savedActive && state.semesters.find(function(s){ return s.id===savedActive; })) ? savedActive : state.semesters[0].id;
+    state.courses = currentSemester().courses;
+
+    var loadedSettings = loadLocal(KEY_SETTINGS, {});
+    state.settings = {
+      theme: loadedSettings.theme||"light",
+      notifMinutes: loadedSettings.notifMinutes||15,
+      notifOn: !!loadedSettings.notifOn,
+      installedAt: loadedSettings.installedAt || new Date().toISOString(),
+      lastBackupAt: loadedSettings.lastBackupAt || "",
+      backupSnoozeUntil: loadedSettings.backupSnoozeUntil || ""
+    };
+
+    updateSemesterPill();
+    if(state.settings.notifOn && "Notification" in window && Notification.permission==="granted"){
+      $("notif-btn").textContent = "Matikan pengingat";
+    }
+    applyTheme();
+    render();
+    saveSemesters();
+    saveSettings();
+  }
+  init();
+})();
+</script>
+</body>
+</html>
