@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Absen NFC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12141a;
+    --panel:#1b1f27;
+    --panel-2:#232834;
+    --border:#2e3542;
+    --text:#e7eaee;
+    --muted:#8892a0;
+    --accent:#3ed6c4;
+    --accent-soft:rgba(62,214,196,.14);
+    --warn:#f2b84b;
+    --warn-soft:rgba(242,184,75,.14);
+    --danger:#e8604c;
+    --danger-soft:rgba(232,96,76,.14);
+    --success:#63c77a;
+    --success-soft:rgba(99,199,122,.14);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 20% -10%, rgba(62,214,196,.08), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(242,184,75,.05), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Sora',system-ui,sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--accent);}
+  button{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+  .app{max-width:640px;margin:0 auto;padding:20px 16px 48px;}
+
+  .topbar{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;}
+  .brand{font-size:20px;font-weight:700;letter-spacing:-.01em;}
+  .brand span{color:var(--accent);}
+  .subtitle{color:var(--muted);font-size:13.5px;margin:0 0 18px;}
+
+  .infobanner{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:10px;
+    padding:10px 12px;font-size:13px;color:var(--muted);margin-bottom:16px;
+    display:none;gap:8px;
+  }
+  .infobanner.show{display:flex;}
+  .infobanner strong{color:var(--warn);}
+  .infobanner button{
+    background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;
+    line-height:1;margin-left:auto;padding:0 2px;
+  }
+  .infobanner .body{flex:1;}
+  .infobanner details{margin-top:6px;}
+  .infobanner summary{cursor:pointer;color:var(--accent);font-size:12.5px;}
+  .infobanner .tips{margin:8px 0 0;padding-left:18px;font-size:12.5px;line-height:1.6;}
+
+  nav.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--border);
+    border-radius:12px;padding:4px;margin-bottom:20px;}
+  nav.tabs button{
+    flex:1;background:none;border:none;color:var(--muted);padding:9px 8px;border-radius:9px;
+    font-size:13.5px;font-weight:500;cursor:pointer;transition:background .15s,color .15s;
+  }
+  nav.tabs button.active{background:var(--panel-2);color:var(--text);}
+
+  section.tab{display:none;}
+  section.tab.active{display:block;}
+
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:20px;margin-bottom:16px;}
+  .card h2{font-size:14.5px;margin:0 0 14px;font-weight:600;color:var(--text);}
+  .card h2 .count{color:var(--muted);font-weight:400;}
+
+  /* --- kiosk stage --- */
+  .stage{display:flex;flex-direction:column;align-items:center;text-align:center;
+    padding:36px 20px 30px;}
+  .tap-zone{
+    width:180px;height:180px;border-radius:50%;position:relative;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    border:2px solid var(--accent); color:var(--accent);
+    background:radial-gradient(circle at 50% 40%, var(--accent-soft), transparent 72%);
+    transition:border-color .25s,color .25s;
+  }
+  .tap-zone::before,.tap-zone::after{
+    content:'';position:absolute;inset:0;border-radius:50%;border:1px solid currentColor;opacity:0;
+  }
+  .tap-zone.scanning::before{animation:pulse-ring 1.7s ease-out infinite;}
+  .tap-zone.scanning::after{animation:pulse-ring 1.7s ease-out infinite;animation-delay:.55s;}
+  @keyframes pulse-ring{0%{transform:scale(1);opacity:.55;}100%{transform:scale(1.55);opacity:0;}}
+  @media (prefers-reduced-motion: reduce){
+    .tap-zone.scanning::before,.tap-zone.scanning::after{animation:none;opacity:.3;}
+  }
+  .tap-zone.state-warn{border-color:var(--warn);color:var(--warn);
+    background:radial-gradient(circle at 50% 40%, var(--warn-soft), transparent 72%);}
+  .tap-zone.state-success{border-color:var(--success);color:var(--success);
+    background:radial-gradient(circle at 50% 40%, var(--success-soft), transparent 72%);}
+  .tap-zone.state-error{border-color:var(--danger);color:var(--danger);
+    background:radial-gradient(circle at 50% 40%, var(--danger-soft), transparent 72%);}
+
+  .stage-title{font-size:17px;font-weight:600;margin:20px 0 4px;}
+  .stage-sub{font-size:13.5px;color:var(--muted);max-width:280px;}
+
+  .toggle-scan{margin-top:18px;background:var(--panel-2);border:1px solid var(--border);
+    color:var(--text);padding:9px 16px;border-radius:9px;font-size:13.5px;cursor:pointer;}
+  .toggle-scan:hover{border-color:var(--accent);}
+
+  /* --- lists / tables --- */
+  .list-row{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 0;border-bottom:1px solid var(--border);font-size:13.5px;}
+  .list-row:last-child{border-bottom:none;}
+  .list-row .who{display:flex;flex-direction:column;gap:2px;}
+  .list-row .who .id{color:var(--muted);font-size:12px;}
+  .list-row .jam{color:var(--accent);font-size:12.5px;}
+  .empty{color:var(--muted);font-size:13px;padding:6px 0;}
+
+  form.reg{display:flex;flex-direction:column;gap:10px;}
+  form.reg label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:4px;}
+  form.reg input{
+    width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);
+    padding:10px 11px;border-radius:9px;font-size:14px;
+  }
+  form.reg input:focus{border-color:var(--accent);}
+  .row2{display:flex;gap:10px;}
+  .row2>div{flex:1;}
+
+  .btn{
+    background:var(--accent);color:#0b1614;border:none;padding:11px 16px;border-radius:9px;
+    font-weight:600;font-size:13.5px;cursor:pointer;
+  }
+  .btn:hover{filter:brightness(1.06);}
+  .btn.secondary{background:var(--panel-2);color:var(--text);border:1px solid var(--border);}
+  .btn.danger{background:var(--danger-soft);color:var(--danger);border:1px solid var(--danger);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  .daftar-status{font-size:12.5px;color:var(--muted);min-height:16px;}
+  .daftar-status.ok{color:var(--success);}
+  .daftar-status.err{color:var(--danger);}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border);}
+  th{color:var(--muted);font-weight:500;font-size:12px;}
+  td.uid{color:var(--muted);font-size:11.5px;}
+  td.act{text-align:right;}
+  .del{background:none;border:none;color:var(--danger);cursor:pointer;font-size:12.5px;}
+
+  .filters{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+  .filters select,.filters input{
+    background:var(--panel-2);border:1px solid var(--border);color:var(--text);
+    padding:8px 10px;border-radius:8px;font-size:13px;
+  }
+  .filters .spacer{flex:1;}
+
+  details.manual{margin-top:16px;}
+  details.manual summary{cursor:pointer;color:var(--muted);font-size:12.5px;}
+  details.manual .box{display:flex;gap:8px;margin-top:10px;}
+  details.manual input{flex:1;background:var(--panel-2);border:1px solid var(--border);
+    color:var(--text);padding:9px 10px;border-radius:8px;font-size:13px;}
+
+  footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:28px;
+    padding-top:16px;border-top:1px solid var(--border);}
+  footer .brand-f{color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">Absen<span>NFC</span></div>
+  </div>
+  <p class="subtitle">Absensi tempel kartu — pakai UID chip KTP / kartu NFC lain</p>
+
+  <div class="infobanner" id="infobanner">
+    <div class="body">
+      <div><strong>Perlu diperhatikan:</strong> <span id="infoMsg">memeriksa dukungan NFC…</span></div>
+      <details>
+        <summary>Cara supaya NFC bisa jalan</summary>
+        <ul class="tips">
+          <li>Pakai <strong>Chrome di Android</strong> (Web NFC belum didukung di iPhone/Safari).</li>
+          <li>Situs harus diakses lewat <strong>HTTPS</strong> — buka langsung dari file di HP tidak akan bisa. Upload file ini ke hosting gratis seperti Netlify Drop atau GitHub Pages, lalu buka link-nya.</li>
+          <li>Aktifkan NFC di pengaturan HP, dan izinkan permintaan akses NFC saat browser meminta.</li>
+          <li>Yang terbaca hanya <em>nomor seri chip</em> kartu, bukan data NIK/nama di e-KTP — makanya tetap perlu didaftarkan manual sekali di awal.</li>
+        </ul>
+      </details>
+    </div>
+    <button onclick="document.getElementById('infobanner').classList.remove('show')" aria-label="Tutup">✕</button>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="absen">Absensi</button>
+    <button class="tab-btn" data-tab="daftar">Registrasi</button>
+    <button class="tab-btn" data-tab="riwayat">Riwayat</button>
+  </nav>
+
+  <!-- TAB: ABSENSI -->
+  <section class="tab active" id="tab-absen">
+    <div class="card">
+      <div class="stage">
+        <div class="tap-zone" id="tapZone" role="button" tabindex="0" aria-label="Mulai pindai NFC">
+          <svg viewBox="0 0 100 100" width="60" height="60" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round">
+            <path d="M32 72 A30 30 0 0 1 32 28" opacity="0.9"/>
+            <path d="M45 80 A44 44 0 0 1 45 20" opacity="0.55"/>
+            <path d="M58 88 A58 58 0 0 1 58 12" opacity="0.3"/>
+            <circle cx="21" cy="50" r="5" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <div class="stage-title" id="stageTitle">Tempelkan kartu</div>
+        <div class="stage-sub" id="stageSub">Ketuk lingkaran di atas untuk mulai memindai, lalu tempelkan kartu ke bagian belakang HP.</div>
+      </div>
+      <details class="manual">
+        <summary>Mode tes manual (tanpa NFC / buat coba di laptop)</summary>
+        <div class="box">
+          <input type="text" id="manualUidAbsen" placeholder="Masukkan UID kartu (mis. 04A1B2C3)">
+          <button class="btn secondary" id="manualAbsenBtn">Kirim</button>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h2>Hadir hari ini <span class="count" id="todayCount"></span></h2>
+      <div id="todayList"></div>
+    </div>
+  </section>
+
+  <!-- TAB: REGISTRASI -->
+  <section class="tab" id="tab-daftar">
+    <div class="card">
+      <h2>Daftarkan kartu baru</h2>
+      <form class="reg" id="formDaftar" onsubmit="return false;">
+        <div>
+          <label for="inNama">Nama</label>
+          <input type="text" id="inNama" placeholder="Nama lengkap" required>
+        </div>
+        <div>
+          <label for="inId">NIM / NIP / ID</label>
+          <input type="text" id="inId" placeholder="Contoh: 2210631160xxx">
+        </div>
+        <button class="btn" id="btnDaftarScan" type="button">Tempel kartu untuk daftar</button>
+        <div class="daftar-status" id="daftarStatus"></div>
+      </form>
+      <details class="manual">
+        <summary>Mode tes manual (tanpa NFC)</summary>
+        <div class="box">
+          <input type="text" id="manualUidDaftar" placeholder="Masukkan UID kartu">
+          <button class="btn secondary" id="manualDaftarBtn">Daftarkan</button>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h2>Peserta terdaftar <span class="count" id="pesertaCount"></span></h2>
+      <table id="pesertaTable">
+        <thead><tr><th>Nama</th><th>ID</th><th>UID Kartu</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty" id="pesertaEmpty" style="display:none;">Belum ada peserta terdaftar.</div>
+    </div>
+  </section>
+
+  <!-- TAB: RIWAYAT -->
+  <section class="tab" id="tab-riwayat">
+    <div class="card">
+      <div class="filters">
+        <input type="date" id="filterDate">
+        <button class="btn secondary" id="btnClearFilter">Semua tanggal</button>
+        <div class="spacer"></div>
+        <button class="btn secondary" id="btnExportCsv">Ekspor CSV</button>
+      </div>
+      <table id="riwayatTable">
+        <thead><tr><th>Nama</th><th>ID</th><th>Tanggal</th><th>Jam</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty" id="riwayatEmpty" style="display:none;">Belum ada riwayat absen.</div>
+      <div style="margin-top:14px;">
+        <button class="btn danger" id="btnClearLog">Hapus semua riwayat</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Data tersimpan di HP ini (localStorage) · dibuat dengan Absen<span class="brand-f">NFC</span> · © 2026 SIAHAAN22
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var LS_PESERTA = 'nfc_absen_peserta';
+  var LS_LOG = 'nfc_absen_log';
+
+  var state = {
+    peserta: JSON.parse(localStorage.getItem(LS_PESERTA) || '[]'),
+    log: JSON.parse(localStorage.getItem(LS_LOG) || '[]'),
+    scanning: false,
+    controller: null,
+    filterDate: null
+  };
+
+  function savePeserta(){ localStorage.setItem(LS_PESERTA, JSON.stringify(state.peserta)); }
+  function saveLog(){ localStorage.setItem(LS_LOG, JSON.stringify(state.log)); }
+
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+  function timeStr(){ return new Date().toTimeString().slice(0,8); }
+  function fmtDate(s){
+    var d = new Date(s + 'T00:00:00');
+    return d.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
+  }
+
+  function cariPeserta(uid){
+    return state.peserta.filter(function(p){ return p.uid === uid; })[0];
+  }
+  function sudahAbsenHariIni(uid){
+    var t = todayStr();
+    return state.log.filter(function(l){ return l.uid === uid && l.tanggal === t; })[0];
+  }
+
+  // ---------- Tabs ----------
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var tabSections = document.querySelectorAll('section.tab');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      tabSections.forEach(function(s){ s.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---------- NFC support check ----------
+  var infobanner = document.getElementById('infobanner');
+  var infoMsg = document.getElementById('infoMsg');
+  var nfcSupported = 'NDEFReader' in window;
+  var isSecure = window.isSecureContext;
+
+  if(!nfcSupported){
+    infoMsg.textContent = 'Browser ini belum mendukung Web NFC. Pakai Chrome terbaru di Android.';
+    infobanner.classList.add('show');
+  } else if(!isSecure){
+    infoMsg.textContent = 'Halaman ini belum diakses lewat HTTPS, jadi NFC tidak akan aktif. Upload ke hosting (Netlify Drop / GitHub Pages) lalu buka linknya.';
+    infobanner.classList.add('show');
+  } else {
+    infoMsg.textContent = 'NFC siap dipakai di perangkat ini. Nomor seri chip kartu yang terbaca, bukan data NIK/biodata.';
+    infobanner.classList.add('show');
+  }
+
+  // ---------- Stage UI (tab Absensi) ----------
+  var tapZone = document.getElementById('tapZone');
+  var stageTitle = document.getElementById('stageTitle');
+  var stageSub = document.getElementById('stageSub');
+  var revertTimer = null;
+
+  function setStage(kind, title, sub){
+    tapZone.classList.remove('state-warn','state-success','state-error');
+    if(kind === 'warn') tapZone.classList.add('state-warn');
+    if(kind === 'success') tapZone.classList.add('state-success');
+    if(kind === 'error') tapZone.classList.add('state-error');
+    stageTitle.textContent = title;
+    stageSub.textContent = sub || '';
+  }
+
+  function scheduleRevert(){
+    clearTimeout(revertTimer);
+    revertTimer = setTimeout(function(){
+      if(state.scanning){
+        tapZone.classList.remove('state-warn','state-success','state-error');
+        setStage(null, 'Menunggu kartu…', 'Tempelkan kartu berikutnya ke bagian belakang HP.');
+      }
+    }, 2600);
+  }
+
+  // ---------- NFC scanning ----------
+  function startAbsenScan(){
+    if(state.scanning) return;
+    if(!nfcSupported){
+      setStage('error', 'NFC tidak didukung', 'Pakai Chrome Android, atau gunakan mode tes manual di bawah.');
+      return;
+    }
+    state.controller = new AbortController();
+    var reader;
+    try{
+      reader = new NDEFReader();
+    }catch(e){
+      setStage('error', 'Gagal membuat pembaca NFC', String(e));
+      return;
+    }
+    reader.scan({ signal: state.controller.signal }).then(function(){
+      state.scanning = true;
+      tapZone.classList.add('scanning');
+      setStage(null, 'Menunggu kartu…', 'Tempelkan kartu ke bagian belakang HP.');
+      reader.onreading = function(ev){
+        handleAbsenUid(ev.serialNumber || '(tanpa uid)');
+      };
+      reader.onreadingerror = function(){
+        setStage('error', 'Gagal membaca kartu', 'Coba tempelkan lagi, posisikan tepat di bagian belakang HP.');
+        scheduleRevert();
+      };
+    }).catch(function(err){
+      setStage('error', 'Izin NFC ditolak', String(err.message || err));
+    });
+  }
+
+  function stopAbsenScan(){
+    if(state.controller) state.controller.abort();
+    state.scanning = false;
+    tapZone.classList.remove('scanning');
+    setStage(null, 'Tempelkan kartu', 'Ketuk lingkaran untuk mulai memindai lagi.');
+  }
+
+  tapZone.addEventListener('click', function(){
+    if(state.scanning){ stopAbsenScan(); } else { startAbsenScan(); }
+  });
+  tapZone.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); tapZone.click(); }
+  });
+
+  function handleAbsenUid(uid){
+    var p = cariPeserta(uid);
+    if(!p){
+      setStage('warn', 'Kartu belum terdaftar', 'UID ' + uid + ' — daftarkan dulu di tab Registrasi.');
+      scheduleRevert();
+      return;
+    }
+    var existing = sudahAbsenHariIni(uid);
+    if(existing){
+      setStage('warn', 'Sudah absen', p.nama + ' sudah tercatat hadir hari ini pukul ' + existing.jam + '.');
+      scheduleRevert();
+      return;
+    }
+    state.log.unshift({ uid: p.uid, nama: p.nama, id: p.id, tanggal: todayStr(), jam: timeStr() });
+    saveLog();
+    setStage('success', 'Absen berhasil', p.nama + (p.id ? ' • ' + p.id : ''));
+    renderTodayList();
+    renderRiwayat();
+    scheduleRevert();
+  }
+
+  document.getElementById('manualAbsenBtn').addEventListener('click', function(){
+    var v = document.getElementById('manualUidAbsen').value.trim();
+    if(!v) return;
+    handleAbsenUid(v);
+    document.getElementById('manualUidAbsen').value = '';
+  });
+
+  // ---------- Registrasi ----------
+  var daftarStatus = document.getElementById('daftarStatus');
+  var daftarController = null;
+
+  function setDaftarStatus(text, ok){
+    daftarStatus.textContent = text;
+    daftarStatus.classList.remove('ok','err');
+    if(ok === true) daftarStatus.classList.add('ok');
+    if(ok === false) daftarStatus.classList.add('err');
+  }
+
+  function daftarkanUid(uid){
+    var existing = cariPeserta(uid);
+    if(existing){
+      setDaftarStatus('Kartu ini sudah terdaftar atas nama ' + existing.nama + '.', false);
+      return;
+    }
+    var nama = document.getElementById('inNama').value.trim();
+    var idv = document.getElementById('inId').value.trim();
+    if(!nama){
+      setDaftarStatus('Isi nama dulu sebelum menempel kartu.', false);
+      return;
+    }
+    state.peserta.push({ uid: uid, nama: nama, id: idv, createdAt: new Date().toISOString() });
+    savePeserta();
+    renderPesertaTable();
+    setDaftarStatus('Berhasil mendaftarkan ' + nama + '.', true);
+    document.getElementById('inNama').value = '';
+    document.getElementById('inId').value = '';
+  }
+
+  document.getElementById('btnDaftarScan').addEventListener('click', function(){
+    if(!nfcSupported){
+      setDaftarStatus('NFC tidak didukung di browser ini. Pakai mode tes manual di bawah.', false);
+      return;
+    }
+    var nama = document.getElementById('inNama').value.trim();
+    if(!nama){
+      setDaftarStatus('Isi nama dulu sebelum menempel kartu.', false);
+      return;
+    }
+    setDaftarStatus('Menunggu tempelan kartu…');
+    daftarController = new AbortController();
+    var reader;
+    try{ reader = new NDEFReader(); } catch(e){ setDaftarStatus('Gagal membuat pembaca NFC: ' + e, false); return; }
+    reader.scan({ signal: daftarController.signal }).then(function(){
+      reader.onreading = function(ev){
+        daftarkanUid(ev.serialNumber || '(tanpa uid)');
+        daftarController.abort();
+      };
+      reader.onreadingerror = function(){
+        setDaftarStatus('Gagal membaca kartu, coba tempel lagi.', false);
+      };
+    }).catch(function(err){
+      setDaftarStatus('Izin NFC ditolak: ' + (err.message || err), false);
+    });
+  });
+
+  document.getElementById('manualDaftarBtn').addEventListener('click', function(){
+    var v = document.getElementById('manualUidDaftar').value.trim();
+    if(!v) return;
+    daftarkanUid(v);
+    document.getElementById('manualUidDaftar').value = '';
+  });
+
+  function renderPesertaTable(){
+    var tbody = document.querySelector('#pesertaTable tbody');
+    tbody.innerHTML = '';
+    document.getElementById('pesertaCount').textContent = state.peserta.length ? '(' + state.peserta.length + ')' : '';
+    document.getElementById('pesertaEmpty').style.display = state.peserta.length ? 'none' : 'block';
+    state.peserta.slice().reverse().forEach(function(p){
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + escapeHtml(p.nama) + '</td>' +
+        '<td>' + escapeHtml(p.id || '—') + '</td>' +
+        '<td class="uid mono">' + escapeHtml(p.uid) + '</td>' +
+        '<td class="act"><button class="del" data-uid="' + escapeHtml(p.uid) + '">Hapus</button></td>';
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll('.del').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(!confirm('Hapus peserta ini? Riwayat absen sebelumnya tidak akan ikut terhapus.')) return;
+        var uid = btn.dataset.uid;
+        state.peserta = state.peserta.filter(function(p){ return p.uid !== uid; });
+        savePeserta();
+        renderPesertaTable();
+      });
+    });
+  }
+
+  // ---------- Today list ----------
+  function renderTodayList(){
+    var t = todayStr();
+    var todays = state.log.filter(function(l){ return l.tanggal === t; });
+    var wrap = document.getElementById('todayList');
+    document.getElementById('todayCount').textContent = todays.length ? '(' + todays.length + ')' : '';
+    wrap.innerHTML = '';
+    if(!todays.length){
+      wrap.innerHTML = '<div class="empty">Belum ada yang absen hari ini.</div>';
+      return;
+    }
+    todays.forEach(function(l){
+      var row = document.createElement('div');
+      row.className = 'list-row';
+      row.innerHTML =
+        '<div class="who"><span>' + escapeHtml(l.nama) + '</span><span class="id mono">' + escapeHtml(l.id || '') + '</span></div>' +
+        '<span class="jam mono">' + escapeHtml(l.jam) + '</span>';
+      wrap.appendChild(row);
+    });
+  }
+
+  // ---------- Riwayat ----------
+  var filterDateEl = document.getElementById('filterDate');
+  filterDateEl.value = todayStr();
+  state.filterDate = todayStr();
+
+  filterDateEl.addEventListener('change', function(){
+    state.filterDate = filterDateEl.value || null;
+    renderRiwayat();
+  });
+  document.getElementById('btnClearFilter').addEventListener('click', function(){
+    filterDateEl.value = '';
+    state.filterDate = null;
+    renderRiwayat();
+  });
+
+  function getFilteredLog(){
+    if(!state.filterDate) return state.log;
+    return state.log.filter(function(l){ return l.tanggal === state.filterDate; });
+  }
+
+  function renderRiwayat(){
+    var rows = getFilteredLog();
+    var tbody = document.querySelector('#riwayatTable tbody');
+    tbody.innerHTML = '';
+    document.getElementById('riwayatEmpty').style.display = rows.length ? 'none' : 'block';
+    rows.forEach(function(l){
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + escapeHtml(l.nama) + '</td>' +
+        '<td>' + escapeHtml(l.id || '—') + '</td>' +
+        '<td>' + fmtDate(l.tanggal) + '</td>' +
+        '<td class="mono">' + escapeHtml(l.jam) + '</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById('btnExportCsv').addEventListener('click', function(){
+    var rows = getFilteredLog();
+    var header = ['Nama','ID','Tanggal','Jam','UID'];
+    var lines = [header.join(',')];
+    rows.forEach(function(l){
+      lines.push([l.nama, l.id, l.tanggal, l.jam, l.uid].map(csvEscape).join(','));
+    });
+    var blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'absen-' + (state.filterDate || 'semua') + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('btnClearLog').addEventListener('click', function(){
+    if(!confirm('Hapus SEMUA riwayat absen? Data peserta terdaftar tidak akan terhapus.')) return;
+    state.log = [];
+    saveLog();
+    renderTodayList();
+    renderRiwayat();
+  });
+
+  function csvEscape(v){
+    v = String(v == null ? '' : v);
+    return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  // ---------- init ----------
+  renderPesertaTable();
+  renderTodayList();
+  renderRiwayat();
+})();
+</script>
+</body>
+</html>
