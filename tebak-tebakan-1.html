@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tebak Imut 🎀 Game Tebak-Tebakan Lucu & Seru untuk Cewek</title>
+<meta name="description" content="Main game tebak-tebakan online gratis khusus cewek: tebakan lucu, galau, dunia cewek, hewan & makanan. Ada 3 tingkat kesulitan dan kartu hasil imut.">
+<meta name="keywords" content="game tebak tebakan, tebak tebakan lucu, tebak tebakan cewek, game online gratis, game cewek, tebakan receh, tebakan galau, kuis cewek, Tebak Imut, SIAHAAN22">
+<meta name="author" content="SIAHAAN22">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#ff8fb8">
+<meta name="application-name" content="Tebak Imut">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tebak Imut">
+<meta property="og:locale" content="id_ID">
+<meta property="og:title" content="Tebak Imut 🎀 Game Tebak-Tebakan Lucu & Seru untuk Cewek">
+<meta property="og:description" content="Main game tebak-tebakan online gratis khusus cewek: tebakan lucu, galau, dunia cewek, hewan & makanan. Ada 3 tingkat kesulitan dan kartu hasil imut.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tebak Imut 🎀 Game Tebak-Tebakan Lucu & Seru untuk Cewek">
+<meta name="twitter:description" content="Main game tebak-tebakan online gratis khusus cewek: tebakan lucu, galau, dunia cewek, hewan & makanan. Ada 3 tingkat kesulitan dan kartu hasil imut.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎀</text></svg>">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Tebak Imut","description":"Main game tebak-tebakan online gratis khusus cewek: tebakan lucu, galau, dunia cewek, hewan & makanan. Ada 3 tingkat kesulitan dan kartu hasil imut.","applicationCategory":"GameApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","inLanguage":"id","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"author":{"@type":"Organization","name":"SIAHAAN22","sameAs":["https://instagram.com/semz_08"]}}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#ffe3ef;--bg2:#e9defa;--card:#fffafc;--ink:#5a3550;--soft:#9c7a92;--pink:#ff8fb8;--pink2:#ff5fa0;--line:#ffd0e2;--good:#bff1de;--goodb:#35b98b;--bad:#ffd0da;--badb:#ff5d82;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#2a1830;--bg2:#1f1a38;--card:#3a2540;--ink:#ffe8f3;--soft:#d3a9c6;--line:#5b3a60;--good:#1f5c4a;--bad:#6b2a3d}}
+:root[data-theme="dark"]{--bg1:#2a1830;--bg2:#1f1a38;--card:#3a2540;--ink:#ffe8f3;--soft:#d3a9c6;--line:#5b3a60;--good:#1f5c4a;--bad:#6b2a3d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;background-color:var(--bg1);background-image:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;color:var(--ink);font-family:'Fredoka','Trebuchet MS',system-ui,sans-serif;font-size:17px}
+#bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+#bg span,.fx{position:absolute;bottom:-40px;opacity:.5;animation:up linear infinite}
+@keyframes up{to{transform:translateY(-115vh) rotate(40deg)}}
+.wrap{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:14px 16px 28px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.brand{font-weight:600;font-size:18px}
+.ico{border:2px solid var(--line);background:var(--card);border-radius:50%;width:42px;height:42px;font-size:20px;cursor:pointer}
+.screen{display:none}.screen.on{display:block;animation:pop .35s}
+@keyframes pop{from{transform:scale(.94);opacity:0}}
+.card{background:var(--card);border:2px solid var(--line);border-radius:26px;padding:18px;box-shadow:0 8px 0 var(--line)}
+h1{margin:4px 0 2px;font-size:38px;text-align:center;color:var(--pink2);line-height:1.1}
+.sub{text-align:center;color:var(--soft);margin:0 0 14px}
+.mascot{font-size:64px;text-align:center;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(4deg)}}
+input{width:100%;padding:12px 16px;border:2px solid var(--line);border-radius:18px;font:inherit;background:var(--bg1);color:var(--ink);margin:6px 0 12px}
+input:focus,button:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cat,.btn,.opt,.life{font:inherit;color:var(--ink);cursor:pointer;border:2px solid var(--line);background:var(--card);border-radius:18px;transition:transform .12s}
+.cat{padding:14px 8px;font-size:16px}.cat b{display:block;font-size:30px;font-weight:400}
+.cat:active,.btn:active,.opt:active{transform:scale(.95)}
+.cat.all{grid-column:1/-1;background:var(--pink);border-color:var(--pink2);color:#fff}
+.btn{padding:13px 18px;font-weight:600;width:100%;margin-top:10px}
+.btn.main{background:var(--pink2);border-color:var(--pink2);color:#fff}
+.pill{text-align:center;margin:12px 0 0;color:var(--soft)}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:600}
+.track{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin-bottom:8px}
+.track i{display:block;height:100%;background:var(--pink);border-radius:9px;transition:width .3s}
+#tbar{background:#8fe3c8;transition:none}
+#qn{color:var(--soft);font-size:15px}
+#qt{font-size:22px;line-height:1.35;margin:6px 0 4px;min-height:90px;display:flex;align-items:center}
+#opts{display:grid;gap:10px;margin-top:12px}
+.opt{padding:13px 14px;text-align:left;font-size:17px}
+.opt.good{background:var(--good);border-color:var(--goodb)}
+.opt.bad{background:var(--bad);border-color:var(--badb);animation:shake .35s}
+.opt.gone{opacity:.3;text-decoration:line-through}
+.opt:disabled{cursor:default}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.lifes{display:flex;gap:10px;margin-top:12px}
+.life{flex:1;padding:10px 6px;font-size:15px}.life:disabled{opacity:.4}
+#hint{display:none;margin-top:10px;padding:10px 14px;border-radius:16px;background:var(--bg2);color:var(--ink)}#hint.on{display:block}
+#toast{min-height:26px;text-align:center;font-weight:600;margin-top:10px;color:var(--pink2)}
+.stars{font-size:44px;text-align:center;letter-spacing:4px}
+.big{font-size:52px;text-align:center;font-weight:600;color:var(--pink2);line-height:1}
+.msg{text-align:center;margin:8px 0}
+.fx{position:fixed;opacity:1;bottom:auto;animation:burst .8s ease-out forwards;pointer-events:none;z-index:9}
+@keyframes burst{to{transform:translate(var(--dx),var(--dy)) scale(.4);opacity:0}}
+.fall{position:fixed;top:-30px;z-index:9;pointer-events:none;animation:fall 2.6s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background-image:radial-gradient(circle at 12% 8%,rgba(255,255,255,.5),transparent 38%),radial-gradient(circle at 90% 92%,rgba(255,143,184,.25),transparent 42%),linear-gradient(160deg,var(--bg1),var(--bg2))}
+.blob{position:absolute;border-radius:50%;filter:blur(46px);opacity:.55;animation:drift 14s ease-in-out infinite alternate}
+.b1{width:260px;height:260px;background:#ff9fc7;top:-60px;left:-70px}.b2{width:300px;height:300px;background:#c9b6f5;bottom:-80px;right:-90px;animation-delay:-5s}.b3{width:200px;height:200px;background:#9ff0d4;top:45%;left:60%;opacity:.35;animation-delay:-9s}
+@keyframes drift{to{transform:translate(30px,40px) scale(1.15)}}
+.wrap{max-width:480px}
+.brand{font-size:20px;font-weight:700;color:var(--pink2)}
+.ico{border-width:3px;box-shadow:0 3px 0 var(--line)}
+.card{position:relative;border-radius:34px;border:3px solid var(--line);border-color:color-mix(in srgb,var(--card),#fff 55%);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 0 var(--line),0 26px 44px -14px rgba(255,95,160,.4)}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:100px;border-radius:31px 31px 0 0;background:linear-gradient(rgba(255,143,184,.16),transparent);pointer-events:none}
+h1{font-size:46px;font-weight:700;letter-spacing:.5px;background:linear-gradient(90deg,#ff5fa0,#b784f7,#ff5fa0);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 0 rgba(255,95,160,.25));animation:sheen 5s linear infinite}
+@keyframes sheen{to{background-position:200% center}}
+.mascot{display:flex;justify-content:center;filter:drop-shadow(0 8px 10px rgba(255,95,160,.35))}.mascot svg{display:block}#eEmoji{font-size:80px}
+input{border:3px solid var(--line);border-radius:20px;padding:14px 18px;box-shadow:inset 0 2px 4px rgba(0,0,0,.06)}
+.cat{border-radius:24px;border:3px solid rgba(255,255,255,.9);color:#5a3550;font-weight:600;box-shadow:0 5px 0 rgba(0,0,0,.08),0 12px 18px -10px rgba(255,95,160,.5)}
+.cat b{font-size:38px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.14))}
+.cat:nth-child(1){background:linear-gradient(160deg,#fff4bf,#ffe08a)}.cat:nth-child(2){background:linear-gradient(160deg,#ffe0ee,#ffb8d6)}.cat:nth-child(3){background:linear-gradient(160deg,#eee4ff,#cdb8fa)}.cat:nth-child(4){background:linear-gradient(160deg,#d6f8ea,#a6ebcf)}
+.cat.all{background:linear-gradient(135deg,#ff8fb8,#ff5fa0 55%,#b784f7);color:#fff;font-size:18px;text-shadow:0 2px 0 rgba(0,0,0,.15)}
+.cat:hover{transform:translateY(-3px)}
+.btn{border:3px solid var(--line);border-radius:20px;box-shadow:0 5px 0 var(--line);font-weight:600;font-size:17px}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+.btn.main{background:linear-gradient(180deg,#ff8fb8,#ff5fa0);border-color:#ffd0e2;box-shadow:0 5px 0 #d9407f,inset 0 2px 0 rgba(255,255,255,.45);text-shadow:0 2px 0 rgba(0,0,0,.15)}
+.bar{font-size:18px}.bar span{background:var(--bg1);border-radius:999px;padding:4px 12px;font-size:16px}.bar span:empty{display:none}
+.track{height:14px;box-shadow:inset 0 2px 3px rgba(0,0,0,.12)}
+.track i{background:linear-gradient(90deg,#ff8fb8,#ff5fa0);box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
+#tbar{background:linear-gradient(90deg,#8fe3c8,#6fd6f0)}
+#qt{justify-content:center;text-align:center;padding:14px 16px;border-radius:24px;background:var(--bg1);border:3px dashed var(--line);font-weight:600;font-size:21px;margin:8px 0 2px}
+#opts{counter-reset:o}
+.opt{display:flex;align-items:center;gap:12px;border-radius:20px;border:3px solid var(--line);box-shadow:0 4px 0 var(--line);padding:11px 14px;font-weight:500;transition:transform .12s,box-shadow .12s,background .2s}
+.opt::before{counter-increment:o;content:counter(o,upper-alpha);flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff;background:linear-gradient(135deg,#ff8fb8,#b784f7);box-shadow:inset 0 2px 0 rgba(255,255,255,.4)}
+.opt:not(:disabled):hover{transform:translateY(-2px)}
+.opt:not(:disabled):active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.opt:disabled{color:var(--ink);opacity:1}
+.opt.good{box-shadow:0 4px 0 var(--goodb)}.opt.good::before{background:var(--goodb);content:"✓"}
+.opt.bad{box-shadow:0 4px 0 var(--badb)}.opt.bad::before{background:var(--badb);content:"✕"}
+.opt.gone{opacity:.3}
+.life{border:3px solid var(--line);border-radius:18px;box-shadow:0 4px 0 var(--line);font-weight:600}
+#hint{border:2px dashed var(--pink)}
+#toast{font-size:18px}
+.stars{font-size:54px;filter:drop-shadow(0 4px 6px rgba(255,190,0,.45))}
+.big{font-size:66px;text-shadow:0 4px 0 var(--line)}
+.lvb{font:inherit;cursor:pointer;padding:10px 4px;border-radius:18px;border:3px solid var(--line);background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 4px 0 var(--line)}
+.lvb.on{background:linear-gradient(180deg,#ff8fb8,#ff5fa0);color:#fff;border-color:#ffd0e2}
+.rv{background:var(--bg1);border-radius:16px;padding:10px 12px;margin-top:8px;font-size:15px;line-height:1.45}.rv div{color:var(--soft)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head>
+<body>
+<noscript><p style="position:relative;z-index:2;text-align:center;padding:16px">Tebak Imut butuh JavaScript. Aktifkan JavaScript di browser untuk bermain game tebak-tebakan ini.</p></noscript>
+<div id="bg"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<div class="wrap">
+ <div class="top"><div class="brand">🎀 Tebak Imut</div><button class="ico" id="snd" aria-label="Suara">🔊</button></div>
+
+ <section class="screen on" id="home"><div class="card">
+  <div class="mascot"><svg viewBox="0 0 120 120" width="130" height="130" role="img" aria-label="Kelinci imut"><g stroke="#ff9cc4" stroke-width="3"><ellipse cx="42" cy="28" rx="13" ry="28" fill="#fff" transform="rotate(-10 42 28)"/><ellipse cx="78" cy="28" rx="13" ry="28" fill="#fff" transform="rotate(10 78 28)"/></g><ellipse cx="42" cy="30" rx="6" ry="19" fill="#ffc2da" transform="rotate(-10 42 30)"/><ellipse cx="78" cy="30" rx="6" ry="19" fill="#ffc2da" transform="rotate(10 78 30)"/><ellipse cx="60" cy="74" rx="40" ry="33" fill="#fff" stroke="#ff9cc4" stroke-width="3"/><circle cx="43" cy="72" r="5.5" fill="#2f1b2e"/><circle cx="77" cy="72" r="5.5" fill="#2f1b2e"/><circle cx="45" cy="70" r="2" fill="#fff"/><circle cx="79" cy="70" r="2" fill="#fff"/><ellipse cx="30" cy="83" rx="7" ry="4.5" fill="#ff8fb8" opacity=".6"/><ellipse cx="90" cy="83" rx="7" ry="4.5" fill="#ff8fb8" opacity=".6"/><path d="M56 80h8l-4 4z" fill="#ff6fa5"/><path d="M52 88q4 5 8 0q4 5 8 0" fill="none" stroke="#2f1b2e" stroke-width="2.5" stroke-linecap="round"/><path d="M60 107L45 99v16zM60 107l15-8v16z" fill="#ff5fa0"/><circle cx="60" cy="107" r="5" fill="#ff8fb8"/></svg></div>
+  <h1>Tebak Imut</h1>
+  <p class="sub">Tebak-tebakan seru khusus kamu, cantik!</p>
+  <label for="name">Nama kamu</label>
+  <input id="name" maxlength="16" placeholder="Ketik namamu di sini" autocomplete="off">
+  <div>Tingkat kesulitan</div><div class="grid" id="lv" style="grid-template-columns:repeat(3,1fr);margin:8px 0 4px"></div><p class="pill" id="lvinfo" style="margin:0 0 12px;font-size:14px"></p><div>Pilih topik</div>
+  <div class="grid" id="cats" style="margin-top:8px"></div>
+  <p class="pill" id="best"></p>
+  <p class="pill" style="font-weight:600;color:var(--pink2)">📸 Setelah selesai, hasilmu wajib dikirim ke IG @semz_08</p>
+  <button class="btn" id="how">📖 Cara main</button>
+  <p class="pill" id="rules" style="display:none">10 soal dan 3 nyawa 💖. Waktu, poin, dan jumlah bantuan (💡 petunjuk, ✂️ 50:50) tergantung tingkat kesulitan yang kamu pilih. Jawab cepat dan beruntun untuk dapat skor combo.</p>
+ </div></section>
+
+ <section class="screen" id="game"><div class="card">
+  <div class="bar"><span id="hearts"></span><span id="score"></span><span id="streak"></span></div>
+  <div class="track"><i id="prog"></i></div>
+  <div class="track"><i id="tbar"></i></div>
+  <div id="qn"></div>
+  <div id="qt"></div>
+  <div id="opts"></div>
+  <div id="hint"></div>
+  <div class="lifes"><button class="life" id="bHint"></button><button class="life" id="bFifty"></button></div>
+  <div id="toast"></div>
+  <button class="btn" id="quit">Kembali ke menu</button>
+ </div></section>
+
+ <section class="screen" id="end"><div class="card">
+  <div class="mascot" id="eEmoji">🎉</div>
+  <div class="stars" id="eStars"></div>
+  <div class="big" id="eScore"></div>
+  <p class="msg" id="eMsg"></p>
+  <p class="msg" id="eInfo" style="color:var(--soft)"></p>
+  <button class="btn" id="revBtn" style="display:none"></button>
+  <div id="review" style="display:none;text-align:left"></div>
+  <div style="margin-top:12px;padding:14px;border-radius:20px;background:var(--bg1);border:3px dashed var(--pink);text-align:center">
+   <b>📸 Wajib kirim hasilmu ke IG @semz_08!</b>
+   <p id="share" style="margin:8px 0 0;font-size:15px;color:var(--soft);white-space:pre-line"></p>
+   <a class="btn main" id="igsend" href="https://ig.me/m/semz_08" target="_blank" rel="noopener" style="display:block;text-decoration:none;text-align:center">💌 Kirim hasil ke IG</a>
+   <button class="btn" id="imgsave">🖼️ Simpan kartu hasil</button>
+   <img id="cardprev" alt="Kartu hasil Tebak Imut" style="display:none;width:100%;border-radius:18px;margin-top:10px;border:3px solid var(--line)">
+  </div>
+  <button class="btn main" id="again" disabled style="opacity:.45">🔁 Main lagi</button>
+  <button class="btn" id="menu" disabled style="opacity:.45">🏠 Pilih topik lain</button>
+ </div></section>
+</div>
+
+<footer style="position:relative;z-index:1;text-align:center;padding:0 16px calc(24px + env(safe-area-inset-bottom,0px));color:var(--soft);font-size:14px"><p style="max-width:460px;margin:0 auto 10px;line-height:1.5">Tebak Imut adalah game tebak-tebakan online gratis untuk cewek. Pilih topik tebakan lucu, galau, dunia cewek, atau hewan dan makanan, lalu kumpulkan skor, combo, dan kartu hasil yang bisa dikirim ke Instagram.</p>© 2026 SIAHAAN22. All rights reserved. IG: <a href="https://instagram.com/semz_08" target="_blank" rel="noopener" style="color:inherit">@semz_08</a></footer>
+<script>
+const CATS={
+lucu:{n:'Receh Lucu',e:'😹',q:[
+["Ada 5 burung di pohon, 1 ditembak. Berapa yang tersisa?","0 (terbang semua)","4","5","1","Yang lain pasti kaget lalu kabur."],
+["Apa yang punya kaki tapi tidak bisa jalan?","Meja","Ular","Awan","Bayangan","Ada di ruang makan."],
+["Apa yang makin dipakai mengeringkan, makin basah?","Handuk","Kipas","Tisu kering","Spons kering","Dipakai setelah mandi."],
+["Apa yang selalu naik tapi tidak pernah turun?","Umur","Lift","Balon","Asap","Bertambah setiap ulang tahun."],
+["Apa yang selalu datang tapi tidak pernah tiba?","Besok","Hujan","Paket","Pelangi","Selalu sehari lagi."],
+["Buah apa yang sering jadi bahan gosip?","Buah bibir","Buah hati","Buah tangan","Buah simalakama","Ada hubungannya dengan mulut."]]},
+cewek:{n:'Dunia Cewek',e:'💄',q:[
+["Warna apa hasil campuran merah dan putih?","Pink","Ungu","Oranye","Hijau","Warna favorit banget!"],
+["Alat untuk melentikkan bulu mata disebut?","Penjepit bulu mata","Sisir alis","Spons rias","Kuas blush","Dipakai sebelum maskara."],
+["Krim wajib siang hari supaya kulit tidak gosong?","Sunscreen","Lip balm","Krim tangan","Parfum","Melindungi dari sinar UV."],
+["Ikat rambut dari kain lembut yang berkerut disebut?","Scrunchie","Bandana","Jepit buaya","Tiara","Namanya lucu, seperti bunyi kerutannya."],
+["Bunga pink khas Jepang yang mekar saat musim semi?","Sakura","Mawar","Melati","Tulip","Banyak dipotret saat hanami."],
+["Batu permata paling keras dan berkilau?","Berlian","Mutiara","Kuarsa","Opal","Sering ada di cincin tunangan."]]},
+galau:{n:'Cinta & Galau',e:'💌',q:[
+["Apa yang lebih dingin dari es batu?","Sikap gebetan yang cuek","Kulkas","Salju","Kutub","Bikin hati meriang."],
+["Berat tapi tidak punya bobot, datang saat jauh dari dia. Apa itu?","Rindu","Angin","Bayangan","Mimpi","Sering disebut di lagu."],
+["Pesan sudah centang biru tapi tidak dibalas. Namanya?","Dibaca doang","Typo","Pending","Spam","Bikin kesal."],
+["Bunga yang paling sering diberikan saat Valentine?","Mawar","Kaktus","Anggrek","Bunga bangkai","Berduri tapi romantis."],
+["Badan baik-baik saja, tapi hati yang terasa sakit. Jatuh apa?","Jatuh cinta","Jatuh tempo","Jatuh miskin","Jatuh bangun","Bikin deg-degan."],
+["Gebetan tiba-tiba menghilang tanpa kabar. Istilahnya?","Ghosting","Roasting","Posting","Typing","Seperti hantu."]]},
+makan:{n:'Hewan & Makanan',e:'🍓',q:[
+["Hewan yang membawa rumah di punggungnya?","Siput","Kupu-kupu","Kucing","Kelinci","Jalannya pelan dan berlendir."],
+["Buah merah kecil yang bijinya ada di luar?","Stroberi","Ceri","Apel","Jambu","Sering jadi topping kue."],
+["Hewan Australia yang melompat dan punya kantong di perut?","Kanguru","Koala","Wombat","Kiwi","Anaknya disebut joey."],
+["Aku manis, dingin, dan meleleh kalau terlalu lama. Siapa aku?","Es krim","Cokelat panas","Permen","Puding hangat","Enak di dalam cone."],
+["Hewan yang bisa berubah warna kulitnya?","Bunglon","Kodok","Cicak","Merpati","Untuk bersembunyi."],
+["Bola kenyal di dalam minuman boba terbuat dari?","Tapioka","Agar-agar","Kacang","Jagung","Berasal dari singkong."]]}
+};
+CATS.lucu.q.push(
+["Apa yang punya banyak tuts tapi tidak bisa membuka pintu?","Piano","Gembok","Laci","Peta","Bisa kamu mainkan dan bunyinya merdu."],
+["Apa yang punya mata tapi tidak bisa melihat?","Jarum","Kucing","Kaca","Batu","Dipakai untuk menjahit."],
+["Apa yang punya leher tapi tidak punya kepala?","Botol","Gelas","Piring","Sendok","Isinya biasanya minuman."],
+["Apa yang makin diambil malah makin besar?","Lubang","Uang","Kue","Air","Kalau digali, dia melebar."],
+["Apa yang bisa terbang tanpa sayap dan menangis tanpa mata?","Awan","Layangan","Pesawat","Balon","Tangisannya disebut hujan."],
+["Apa yang selalu ada di depanmu tapi tidak bisa kamu lihat?","Masa depan","Tembok","Cermin","Kemarin","Belum terjadi."],
+["Apa yang bisa kamu tangkap tapi tidak bisa kamu lempar?","Pilek","Bola","Ikan","Kunci","Sering kena kalau kehujanan."],
+["Apa yang punya jarum tapi tidak dipakai menjahit?","Jam","Kompor","Sepatu","Cermin","Selalu berputar."],
+["Apa yang hilang begitu namanya kamu sebut?","Keheningan","Bayangan","Pelangi","Embun","Biasanya ada di perpustakaan."]);
+CATS.cewek.q.push(
+["Produk untuk membersihkan makeup sebelum cuci muka?","Micellar water","Parfum","Pensil alis","Lip tint","Biasanya dipakai dengan kapas."],
+["Catokan rambut dipakai untuk apa?","Meluruskan rambut","Mewarnai kuku","Mencuci muka","Mengukur suhu","Panas dan dijepit di helai rambut."],
+["Perawatan kuku tangan di salon disebut?","Manicure","Pedicure","Facial","Creambath","Bukan untuk kaki ya."],
+["Cairan wangi yang disemprot ke badan?","Parfum","Toner","Serum","Sabun","Wanginya bisa awet seharian."],
+["Hiasan kepala berbentuk mahkota kecil?","Tiara","Peci","Syal","Kacamata","Dipakai putri kerajaan."],
+["Kain tradisional Indonesia bermotif, sudah diakui UNESCO?","Batik","Denim","Flanel","Satin","Ada peringatan Hari Nasionalnya."],
+["Produk di mata untuk membuat bulu mata terlihat tebal?","Maskara","Blush on","Lip balm","Foundation","Punya sikat kecil."],
+["Makeup pipi berwarna merah muda agar terlihat segar?","Blush on","Eyeliner","Maskara","Lip gloss","Dioleskan di pipi."],
+["Menghias kuku dengan cat, stiker, dan permata kecil disebut?","Nail art","Body art","Latte art","Pop art","Dikerjakan di ujung jari."]);
+CATS.galau.q.push(
+["Mantan yang tiba-tiba muncul lagi setelah lama menghilang disebut?","Zombieing","Ghosting","Benching","Roasting","Muncul lagi seperti makhluk yang bangkit."],
+["Pemberi Harapan Palsu disingkat?","PHP","PDKT","LDR","OTW","Tiga huruf, bikin hati sakit."],
+["PDKT adalah singkatan dari?","Pendekatan","Pedang Kata","Pemuda Kota","Pasti Dapat Kasih","Tahap awal mengenal gebetan."],
+["LDR adalah hubungan yang dijalani secara?","Jarak jauh","Rahasia","Singkat","Dekat sekali","Beda kota atau beda pulau."],
+["Terbawa perasaan hanya karena perhatian kecil. Istilahnya?","Baper","Mager","Gabut","Santuy","Singkatan dari bawa perasaan."],
+["Penasaran dan suka mengintip kehidupan gebetan di medsos disebut?","Kepo","Baper","Mager","Gabut","Ingin tahu segalanya tentang dia."],
+["Menyatakan perasaan kepada gebetan disebut?","Nembak","Ngegas","Ngopi","Ngerem","Tidak pakai senjata, ya."],
+["Hari Valentine jatuh pada tanggal?","14 Februari","14 Maret","1 Januari","17 Agustus","Bulan paling pendek."],
+["Bucin adalah singkatan dari?","Budak cinta","Buka cinta","Bunga cinta","Buku cinta","Rela melakukan apa saja demi dia."]);
+CATS.makan.q.push(
+["Hewan laut berkaki delapan yang bisa menyemprotkan tinta?","Gurita","Ubur-ubur","Bintang laut","Kepiting","Kepalanya bulat dan lunak."],
+["Hewan darat terbesar di dunia?","Gajah","Jerapah","Badak","Kuda nil","Punya belalai panjang."],
+["Burung yang tidak bisa terbang tapi larinya sangat cepat?","Burung unta","Elang","Merpati","Kakatua","Telurnya sangat besar."],
+["Hewan yang tidur menggantung terbalik di gua?","Kelelawar","Tupai","Burung hantu","Landak","Aktif di malam hari."],
+["Makanan manis berbahan biji kakao?","Cokelat","Keju","Roti tawar","Kerupuk","Bisa dilelehkan jadi fondue."],
+["Kue bundar yang lilinnya ditiup saat ulang tahun?","Kue tart","Klepon","Lemper","Cilok","Ada lilin di atasnya."],
+["Buah berduri beraroma menyengat yang dijuluki raja buah?","Durian","Nangka","Salak","Rambutan","Baunya tercium dari jauh."],
+["Bubuk teh hijau khas Jepang yang sering jadi es krim?","Matcha","Kopi","Cokelat","Taro","Warnanya hijau cantik."],
+["Hewan laut yang menyusui anaknya, pintar, dan suka melompat?","Lumba-lumba","Hiu","Gurita","Penyu","Bersuara klik-klik."]);
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const LV={mudah:{n:'Mudah',e:'🌷',t:30,m:1,h:4,f:3},sedang:{n:'Sedang',e:'🌸',t:20,m:1.5,h:3,f:2},susah:{n:'Susah',e:'🔥',t:12,m:2,h:1,f:1}};
+let snd=true,ac=null,best=0,G=null,level='sedang';
+try{best=+localStorage.getItem('tt_best')||0}catch(e){}
+function beep(f,d,t){if(!snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+(d||.12));o.stop(ac.currentTime+(d||.12))}catch(e){}}
+function show(id){$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
+function home(){clearInterval(G&&G.tm);$('#best').textContent=best?'🏆 Skor terbaikmu: '+best:'Belum ada skor, yuk main!';show('home')}
+
+// background floaties
+['🎀','💖','🌸','✨','🍓','🦋','🌷','⭐'].forEach((e,i)=>{for(let k=0;k<2;k++){const s=document.createElement('span');s.textContent=e;s.style.left=Math.random()*95+'%';s.style.fontSize=(18+Math.random()*18)+'px';s.style.animationDuration=(12+Math.random()*12)+'s';s.style.animationDelay=(-Math.random()*20)+'s';$('#bg').append(s)}});
+
+// category buttons
+const cats=$('#cats');
+Object.entries(CATS).forEach(([k,c])=>{const b=document.createElement('button');b.className='cat';b.innerHTML='<b>'+c.e+'</b>'+c.n;b.onclick=()=>start(k);cats.append(b)});
+const all=document.createElement('button');all.className='cat all';all.textContent='🎀 Campur Semua';all.onclick=()=>start('all');cats.append(all);
+function lvUI(){$$('.lvb').forEach(b=>b.classList.toggle('on',b.dataset.k===level));const c=LV[level];$('#lvinfo').textContent='⏱ '+c.t+' detik • poin x'+c.m+' • '+c.h+' petunjuk • '+c.f+'× 50:50'}
+Object.entries(LV).forEach(([k,c])=>{const b=document.createElement('button');b.className='lvb';b.dataset.k=k;b.textContent=c.e+' '+c.n;b.onclick=()=>{level=k;lvUI()};$('#lv').append(b)});
+lvUI();
+
+function start(cat){
+ const pool=cat==='all'?Object.values(CATS).flatMap(c=>c.q):CATS[cat].q;
+ const qs=sh(pool).slice(0,10).map(r=>({q:r[0],a:r[1],o:sh(r.slice(1,5)),h:r[5]}));
+ G={cat,qs,i:0,score:0,lives:3,streak:0,right:0,lv:level,tmax:LV[level].t,mult:LV[level].m,hints:LV[level].h,fifty:LV[level].f,locked:false,used:false,left:LV[level].t,tm:null,wrong:[],name:$('#name').value.trim().slice(0,16)};
+ show('game');render();
+}
+function stats(){
+ $('#hearts').textContent='💖'.repeat(G.lives)+'🤍'.repeat(3-G.lives);
+ $('#score').textContent='⭐ '+G.score;
+ $('#streak').textContent=G.streak>1?'🔥 x'+G.streak:'';
+ $('#bHint').textContent='💡 Petunjuk ('+G.hints+')';
+ $('#bFifty').textContent='✂️ 50:50 ('+G.fifty+')';
+ $('#bHint').disabled=G.locked||G.hints<1;
+ $('#bFifty').disabled=G.locked||G.fifty<1||G.used;
+}
+function render(){
+ const q=G.qs[G.i];G.locked=false;G.used=false;G.left=G.tmax;
+ $('#qn').textContent='Soal '+(G.i+1)+' dari '+G.qs.length;
+ $('#qt').textContent=q.q;
+ $('#prog').style.width=(G.i/G.qs.length*100)+'%';
+ $('#tbar').style.width='100%';
+ $('#toast').textContent='';
+ const h=$('#hint');h.textContent='';h.classList.remove('on');
+ const o=$('#opts');o.innerHTML='';
+ q.o.forEach(t=>{const b=document.createElement('button');b.className='opt';b.textContent=t;b.onclick=()=>answer(b,t);o.append(b)});
+ stats();clearInterval(G.tm);
+ G.tm=setInterval(()=>{G.left-=.1;$('#tbar').style.width=Math.max(0,G.left/G.tmax*100)+'%';if(G.left<=0)answer(null,null)},100);
+}
+function burst(el){
+ const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+ for(let i=0;i<8;i++){const s=document.createElement('span');s.className='fx';s.textContent=['✨','💖','⭐','🌸'][i%4];s.style.left=x+'px';s.style.top=y+'px';s.style.setProperty('--dx',(Math.random()*160-80)+'px');s.style.setProperty('--dy',(Math.random()*-120-20)+'px');document.body.append(s);setTimeout(()=>s.remove(),900)}
+}
+function answer(b,t){
+ if(!G||G.locked)return;
+ G.locked=true;clearInterval(G.tm);
+ const q=G.qs[G.i],good=t===q.a;
+ $$('.opt').forEach(x=>{x.disabled=true;if(x.textContent===q.a)x.classList.add('good')});
+ if(good){G.streak++;G.right++;const p=Math.round((10+Math.ceil(G.left)+(G.streak-1)*2)*G.mult);G.score+=p;$('#toast').textContent='Yey benar! +'+p+(G.streak>1?' 🔥 combo x'+G.streak:' 🎉');beep(660);setTimeout(()=>beep(880),90);burst(b)}
+ else{G.wrong.push({q:q.q,mine:b?t:null,a:q.a});if(b)b.classList.add('bad');G.lives--;G.streak=0;$('#toast').textContent=b?'Yah, salah 🥺 Jawabannya sudah ditandai':'Waktu habis ⏰';beep(200,.25,'triangle')}
+ stats();
+ const me=G;
+ setTimeout(()=>{if(G!==me||!G.locked)return;if(G.lives<=0||G.i>=G.qs.length-1)end();else{G.i++;render()}},1600);
+}
+$('#bHint').onclick=()=>{if(G.locked||G.hints<1)return;G.hints--;const h=$('#hint');h.textContent='💡 '+G.qs[G.i].h;h.classList.add('on');stats()};
+$('#bFifty').onclick=()=>{if(G.locked||G.fifty<1||G.used)return;G.fifty--;G.used=true;const q=G.qs[G.i];sh($$('.opt').filter(x=>x.textContent!==q.a)).slice(0,2).forEach(x=>{x.disabled=true;x.classList.add('gone')});stats()};
+function end(){
+ clearInterval(G.tm);
+ const n=G.qs.length,r=G.right/n,st=G.right===0?0:r>=.8?3:r>=.5?2:1;
+ let nb=false;if(G.score>best){best=G.score;nb=true;try{localStorage.setItem('tt_best',best)}catch(e){}}
+ const who=G.name||'Cantik';
+ $('#eEmoji').textContent=['🥺','🐰','🦄','👑'][st];
+ $('#eStars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);
+ $('#eScore').textContent=G.score;
+ $('#eMsg').textContent=who+', '+['jangan sedih ya, coba lagi pasti bisa! 🌷','lumayan banget! 🌸','pintar sekali! 💖','kamu jenius imut sejati! 👑'][st];
+ $('#eInfo').textContent=G.right+' dari '+n+' benar'+(G.lives<=0?' • nyawa habis':'')+(nb?' • 🏆 Skor terbaik baru!':'');
+ const txt='Hasil Tebak Imut 🎀\nNama: '+who+'\nTingkat: '+LV[G.lv].n+'\nSkor: '+G.score+'\nBenar: '+G.right+' dari '+n+(st?'\nBintang: '+'⭐'.repeat(st):'');
+ shareTxt=txt;lastRes={who,score:G.score,right:G.right,n,st,lvn:LV[G.lv].n};$('#cardprev').style.display='none';$('#imgsave').textContent='🖼️ Simpan kartu hasil';$('#share').textContent=txt;$('#igsend').textContent='💌 Kirim hasil ke IG';
+ ['#again','#menu'].forEach(x=>{$(x).disabled=true;$(x).style.opacity=.45});
+ const rv=$('#review'),rb=$('#revBtn');rv.style.display='none';rv.innerHTML='';
+ if(G.wrong.length){G.wrong.forEach(w=>{const d=document.createElement('div');d.className='rv';const a=document.createElement('b');a.textContent=w.q;const m=document.createElement('div');m.textContent=w.mine?'❌ Jawabanmu: '+w.mine:'⏰ Waktu habis';const c=document.createElement('div');c.textContent='✅ Jawaban benar: '+w.a;d.append(a,m,c);rv.append(d)});rb.textContent='📝 Lihat jawaban yang salah ('+G.wrong.length+')';rb.style.display='block'}else{rb.style.display='none'}
+ show('end');
+ if(st>=2)for(let i=0;i<28;i++){const s=document.createElement('span');s.className='fall';s.textContent=['🎀','💖','✨','🌸','⭐'][i%5];s.style.left=Math.random()*95+'%';s.style.fontSize=(18+Math.random()*16)+'px';s.style.animationDelay=Math.random()*1.2+'s';document.body.append(s);setTimeout(()=>s.remove(),4200)}
+}
+let shareTxt='',lastRes=null;
+$('#igsend').onclick=()=>{
+ try{if(navigator.clipboard)navigator.clipboard.writeText(shareTxt).catch(()=>{})}catch(e){}
+ $('#igsend').textContent='✅ Hasil disalin! Tempel di chat IG';
+ ['#again','#menu'].forEach(x=>{$(x).disabled=false;$(x).style.opacity=1});
+};
+function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+async function makeCard(){
+ try{await document.fonts.ready}catch(e){}
+ const R=lastRes,W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;
+ const x=c.getContext('2d'),F=(s,w)=>(w||600)+' '+s+"px Fredoka,'Trebuchet MS',sans-serif";
+ const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#ffd3e6');g.addColorStop(1,'#d9c8fb');x.fillStyle=g;x.fillRect(0,0,W,H);
+ [[110,130,250,'#ff9fc7'],[980,1230,320,'#c9b6f5'],[930,250,170,'#9ff0d4']].forEach(a=>{x.globalAlpha=.5;x.fillStyle=a[3];x.beginPath();x.arc(a[0],a[1],a[2],0,7);x.fill()});
+ x.globalAlpha=1;x.textAlign='center';x.textBaseline='middle';
+ x.shadowColor='rgba(255,95,160,.35)';x.shadowBlur=50;x.shadowOffsetY=24;
+ rr(x,80,120,920,1060,70);x.fillStyle='#fffafc';x.fill();
+ x.shadowColor='transparent';x.shadowBlur=0;x.shadowOffsetY=0;x.lineWidth=12;x.strokeStyle='#ffc4dd';x.stroke();
+ const E=['🎀','💖','🌸','✨','🍓','🦋'];x.font=F(60);
+ [[150,200],[930,200],[140,1100],[940,1100],[125,640],[955,640]].forEach((p,i)=>x.fillText(E[i],p[0],p[1]));
+ x.fillStyle='#ff5fa0';x.font=F(100,700);x.fillText('Tebak Imut',540,240);
+ x.font=F(190);x.fillText(['🥺','🐰','🦄','👑'][R.st],540,440);
+ x.fillStyle='#ff8fb8';x.font=F(90);x.fillText('⭐'.repeat(R.st)+'☆'.repeat(3-R.st),540,610);
+ x.fillStyle='#9c7a92';x.font=F(46);x.fillText('Skor kamu',540,705);
+ x.fillStyle='#ff5fa0';x.font=F(210,700);x.fillText(String(R.score),540,815);
+ x.fillStyle='#5a3550';x.font=F(60,700);x.fillText(R.who,540,935);
+ x.fillStyle='#9c7a92';x.font=F(44);x.fillText(R.right+' dari '+R.n+' soal benar • '+R.lvn,540,1000);
+ const pg=x.createLinearGradient(260,0,820,0);pg.addColorStop(0,'#ff8fb8');pg.addColorStop(1,'#b784f7');
+ rr(x,260,1045,560,80,40);x.fillStyle=pg;x.fill();
+ x.fillStyle='#fff';x.font=F(46,700);x.fillText('📸 @semz_08',540,1087);
+ x.fillStyle='#7a4f70';x.font=F(38);x.fillText('Kirim kartu ini ke IG @semz_08',540,1237);
+ x.font=F(36,500);x.fillText('© 2026 SIAHAAN22',540,1297);
+ return c;
+}
+const unlock=()=>['#again','#menu'].forEach(k=>{$(k).disabled=false;$(k).style.opacity=1});
+$('#imgsave').onclick=async()=>{
+ const b=$('#imgsave'),T='🖼️ Simpan kartu hasil';
+ if(!lastRes)return;
+ b.textContent='⏳ Membuat kartu...';
+ try{
+  const c=await makeCard(),prev=$('#cardprev');
+  prev.src=c.toDataURL('image/png');prev.style.display='block';
+  const blob=await new Promise(r=>c.toBlob(r,'image/png'));
+  if(blob){
+   const f=new File([blob],'hasil-tebak-imut.png',{type:'image/png'});
+   if(navigator.canShare&&navigator.canShare({files:[f]})){
+    try{await navigator.share({files:[f],text:shareTxt});unlock();b.textContent=T;return}
+    catch(e){if(e&&e.name==='AbortError'){b.textContent=T;return}}
+   }
+   const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='hasil-tebak-imut.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+  }
+  b.textContent='✅ Kartu siap! Tahan gambar untuk simpan, lalu kirim ke IG';
+ }catch(e){b.textContent='Gagal membuat kartu, coba lagi'}
+};
+$('#revBtn').onclick=()=>{const rv=$('#review');rv.style.display=rv.style.display==='none'?'block':'none'};
+$('#again').onclick=()=>start(G.cat);
+$('#menu').onclick=home;
+$('#quit').onclick=home;
+$('#how').onclick=()=>{const r=$('#rules');r.style.display=r.style.display==='none'?'block':'none'};
+$('#snd').onclick=()=>{snd=!snd;$('#snd').textContent=snd?'🔊':'🔇'};
+home();
+</script>
+</body></html>
